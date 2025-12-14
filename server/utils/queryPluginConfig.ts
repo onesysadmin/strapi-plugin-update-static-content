@@ -23,12 +23,12 @@ export async function queryPluginConfig(strapi: Core.Strapi) {
     if (!strapi.documents) {
       throw new Error('Document service not found');
     }
-    const config = await strapi.documents('plugin::update-static-content.config').findMany();
+    const config = await strapi.documents('plugin::update-static-content.config').findMany() as any;
     if (!config) {
       throw new Error('Config not found');
     }
     
-    const processedConfig = await Promise.all(config.map(decryptToken));
+    const processedConfig = await Promise.all((config as Config[]).map(decryptToken));
     return processedConfig;
   }
   catch (err) {
@@ -42,9 +42,10 @@ export async function queryPluginConfigId(strapi: Core.Strapi, id: string) {
     if (!strapi.documents) {
       throw new Error('Document service not found');
     }
-    const config = await strapi.documents('plugin::update-static-content.config').findOne({
+    const result = await strapi.documents('plugin::update-static-content.config').findOne({
       documentId: id
-    }) as Config | null;
+    }) as any;
+    const config = result as Config | null;
     if (!config) {
       throw new Error('Config not found');
     }
