@@ -14,19 +14,19 @@ The `strapi-plugin-update-static-content` plugin has been successfully upgraded 
 All package dependencies were updated to be compatible with Strapi v5:
 
 **Core Strapi Packages:**
-- `@strapi/design-system`: 1.19.0 → ^2.0.0-rc.14
-- `@strapi/icons`: 1.19.0 → ^2.0.0-rc.14
+- `@strapi/design-system`: 1.19.0 → ^2.0.0 (stable - latest 2.0.2)
+- `@strapi/icons`: 1.19.0 → ^2.0.0 (stable - latest 2.0.2)
 - `@strapi/helper-plugin`: Removed (functionality moved to @strapi/strapi/admin)
-- Added `@strapi/sdk-plugin`: ^5.0.0
-- Added `@strapi/strapi`: ^5.0.0
-- `@strapi/typescript-utils`: 4.14.4 → ^5.0.0
+- Added `@strapi/sdk-plugin`: ^5.3.0 (latest 5.3.2)
+- Added `@strapi/strapi`: ^5.32.0 (latest 5.32.0)
+- `@strapi/typescript-utils`: 4.14.4 → ^5.32.0
 
 **Frontend Dependencies:**
 - `react`: ^18.0.0 → ^18.3.1
 - `react-dom`: ^18.0.0 → ^18.3.1
 - `react-router-dom`: 5.3.4 → ^6.22.0
 - `styled-components`: 5.3.6 → ^6.1.8
-- `react-intl`: 6.2.1 → 6.6.2
+- `react-intl`: 6.2.1 → ^6.6.0 (latest 6.8.9)
 
 **Development Dependencies:**
 - `typescript`: 5.0.4 → 5.3.3

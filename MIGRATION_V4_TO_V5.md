@@ -17,11 +17,11 @@ The plugin has been successfully migrated to be compatible with Strapi v5. This 
 ### 1. Dependencies Updated
 
 #### Design System & Admin
-- `@strapi/design-system`: 1.19.0 → ^2.0.0-rc.14
-- `@strapi/icons`: 1.19.0 → ^2.0.0-rc.14
+- `@strapi/design-system`: 1.19.0 → ^2.0.0 (stable)
+- `@strapi/icons`: 1.19.0 → ^2.0.0 (stable)
 - `@strapi/helper-plugin`: Removed (functionality moved to `@strapi/strapi/admin`)
-- Added: `@strapi/sdk-plugin`: ^5.0.0
-- Added: `@strapi/strapi`: ^5.0.0
+- Added: `@strapi/sdk-plugin`: ^5.3.0
+- Added: `@strapi/strapi`: ^5.32.0
 
 #### React & Router
 - `react`: ^18.0.0 → ^18.3.1
@@ -30,7 +30,7 @@ The plugin has been successfully migrated to be compatible with Strapi v5. This 
 - `styled-components`: 5.3.6 → ^6.1.8
 
 #### TypeScript & Tooling
-- `@strapi/typescript-utils`: 4.14.4 → ^5.0.0
+- `@strapi/typescript-utils`: 4.14.4 → ^5.32.0
 - `typescript`: 5.0.4 → 5.3.3
 - `eslint`: 8.38.0 → 8.57.0
 - `prettier`: 2.8.7 → 3.3.3
@@ -262,7 +262,7 @@ After migration, thoroughly test:
 
 1. **Type Safety**: Type assertions using `as unknown` were added to handle the transition between Strapi's Document Service return types and the plugin's Config type. These are necessary because the Document Service API returns extended metadata beyond our interface definition. As Strapi v5 type definitions stabilize, these can be refined.
 
-2. **Design System RC Version**: The plugin uses release candidate versions of @strapi/design-system v2. Monitor for stable releases and update accordingly.
+2. **Design System Stable Version**: The plugin now uses stable versions of @strapi/design-system v2 (2.0.2) and @strapi/icons v2 (2.0.2).
 
 3. **Deprecation Warnings**: During npm install, you may see deprecation warnings for transitive dependencies. These are from Strapi's dependencies and don't affect plugin functionality.
 
