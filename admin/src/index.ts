@@ -1,9 +1,8 @@
-import { prefixPluginTranslations } from '@strapi/helper-plugin';
+import { prefixPluginTranslations } from '@strapi/strapi/admin';
 
 import pluginPkg from '../../package.json';
 import pluginId from './pluginId';
 import pluginPermissions from './permissions';
-import Initializer from './components/Initializer';
 import PluginIcon from './components/PluginIcon';
 
 const name = pluginPkg.strapi.displayName;
@@ -11,53 +10,50 @@ const name = pluginPkg.strapi.displayName;
 export default {
   register(app: any) {
     app.addMenuLink({
-      to: `/plugins/${pluginId}`,
+      to: `plugins/${pluginId}`,
       icon: PluginIcon,
       intlLabel: {
         id: `${pluginId}.plugin.name`,
         defaultMessage: name,
       },
       Component: async () => {
-        const component = await import('./pages/App');
-
-        return component;
+        const { PluginPage } = await import('./pages/PluginPage');
+        return PluginPage;
       },
-      //permissions: [pluginPermissions.trigger],
+      permissions: pluginPermissions.trigger,
     });
-    const pluginPrefix = `${pluginId}.settings`;
+    
     app.createSettingSection(
       {
-        id: pluginPrefix,
+        id: pluginId,
         intlLabel: {
-          id: `${pluginPrefix}.title`,
+          id: `${pluginId}.settings.title`,
           defaultMessage: name,
         },
       },
       [
         {
-          id: pluginPrefix,
+          id: pluginId,
           intlLabel: {
-            id: `${pluginPrefix}.subtitle.link`,
+            id: `${pluginId}.settings.subtitle.link`,
             defaultMessage: 'Configuration',
           },
-          to: `/settings/${pluginId}`,
+          to: `settings/${pluginId}`,
           Component: async () => {
-            const component = await import('./pages/App');
-            return component;
+            const { SettingPage } = await import('./pages/SettingPage');
+            return SettingPage;
           },
-        //permissions: [pluginPermissions.settings],
+          permissions: pluginPermissions.settings,
         },
       ]
     );
+
     app.registerPlugin({
       id: pluginId,
-      initializer: Initializer,
-      isReady: false,
       name,
     });
   },
 
-  bootstrap(app: any) {},
   async registerTrads(app: any) {
     const { locales } = app;
     const importedTrads = await Promise.all(

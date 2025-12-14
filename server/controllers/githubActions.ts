@@ -1,7 +1,7 @@
-import type { Strapi } from '@strapi/strapi';
+import type { Core } from '@strapi/strapi';
 import pluginId from '../../admin/src/pluginId';
 
-export default ({ strapi }: { strapi: Strapi }) => ({
+export default ({ strapi }: { strapi: Core.Strapi }) => ({
   history: async (ctx) => {
     const { id } = ctx.params;
     const { page } = ctx.request.query;

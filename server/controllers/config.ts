@@ -1,4 +1,4 @@
-import type { Strapi } from '@strapi/strapi';
+import type { Core } from '@strapi/strapi';
 import * as jose from 'jose';
 import pluginId from '../../admin/src/pluginId';
 import {queryPluginConfig, queryPluginConfigId} from '../utils/queryPluginConfig';
@@ -6,7 +6,7 @@ import {validateConfig} from '../validators/validateConfig';
 import Config from '../../types/Config';
 
 
-export default ({ strapi }: { strapi: Strapi }) => ({
+export default ({ strapi }: { strapi: Core.Strapi }) => ({
   getPluginConfig: async (ctx) => {
     try {
       const pluginConfig = await queryPluginConfig(strapi) as Config[];
@@ -48,7 +48,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   deletePluginConfigById : async (ctx) => {
     try {
       const { id } = ctx.params;
-      await strapi.entityService?.delete(`plugin::${pluginId}.config`, id);
+      await strapi.documents(`plugin::${pluginId}.config`).delete({
+        documentId: id
+      });
       ctx.body = {
         success: true,
         message: 'Config deleted successfully'
@@ -85,7 +87,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
       sanitizedBody.githubToken = jwt;
       
-      await strapi.entityService?.create(`plugin::${pluginId}.config`, {
+      await strapi.documents(`plugin::${pluginId}.config`).create({
           data: sanitizedBody
       });
       ctx.body = {

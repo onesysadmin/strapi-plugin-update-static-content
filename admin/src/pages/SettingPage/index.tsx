@@ -1,17 +1,8 @@
-import { BaseHeaderLayout, Layout } from '@strapi/design-system';
-import { CheckPagePermissions } from '@strapi/helper-plugin';
+import { Layouts } from '@strapi/strapi/admin';
 import PageWrapper from '../../components/PageWrapper';
 import useFormattedLabel from '../../hooks/useFormattedLabel';
 import pluginPermissions from '../../permissions';
 import ConfigsTable from '../../components/ConfigsTable';
-
-export default function ProtectedPage() {
-  return (
-    <CheckPagePermissions permissions={pluginPermissions.settings}>
-      <SettingPage />
-    </CheckPagePermissions>
-  );
-}
 
 const SettingPage = () => {
   // Translations
@@ -20,13 +11,15 @@ const SettingPage = () => {
   const HEADER_SUBTITLE = useFormattedLabel('settings.headers.subtitle');
 
   return (
-    <Layout>
-    <PageWrapper
-      baseHeaderLayout={<BaseHeaderLayout title={HEADER_TITLE} subtitle={HEADER_SUBTITLE} />}
-      pageTitle={PAGE_TITLE}
-    >
+    <Layouts.Root>
+      <PageWrapper
+        baseHeaderLayout={<Layouts.Header title={HEADER_TITLE} subtitle={HEADER_SUBTITLE} />}
+        pageTitle={PAGE_TITLE}
+      >
         <ConfigsTable />
-    </PageWrapper>
-      </Layout>
+      </PageWrapper>
+    </Layouts.Root>
   );
 };
+
+export { SettingPage };

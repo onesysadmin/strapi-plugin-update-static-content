@@ -5,8 +5,8 @@
  *
  */
 
-import { Switch, Route } from 'react-router-dom';
-import { AnErrorOccurred } from '@strapi/helper-plugin';
+import { Routes, Route } from 'react-router-dom';
+import { Page } from '@strapi/strapi/admin';
 import pluginId from '../../pluginId';
 import PluginPage from '../PluginPage';
 import SettingPage from '../SettingPage';
@@ -14,22 +14,12 @@ import AddNewWorkflow from '../SettingPage/addWorkflow';
 
 const App = () => {
   return (
-    <div>
-      <Switch>
-        <Route path={`/settings/${pluginId}`} exact>
-          <SettingPage />
-        </Route>
-        <Route path={`/plugins/${pluginId}`} exact>
-          <PluginPage />
-        </Route>
-        <Route path={`/settings/${pluginId}/new-workflow`}>
-          <AddNewWorkflow />
-        </Route>
-        <Route>
-          <AnErrorOccurred />
-        </Route>
-      </Switch>
-    </div>
+    <Routes>
+      <Route path={`settings/${pluginId}`} element={<SettingPage />} />
+      <Route path={`plugins/${pluginId}`} element={<PluginPage />} />
+      <Route path={`settings/${pluginId}/new-workflow`} element={<AddNewWorkflow />} />
+      <Route path="*" element={<Page.Error />} />
+    </Routes>
   );
 };
 

@@ -1,7 +1,7 @@
-import type { Strapi } from '@strapi/strapi';
+import type { Core } from '@strapi/strapi';
 import pluginName from '../admin/src/pluginId';
 
-export default async ({ strapi }: { strapi: Strapi }) => {
+export default async ({ strapi }: { strapi: Core.Strapi }) => {
   if (typeof strapi.admin == 'undefined') return;
 
   const actions = [
@@ -21,5 +21,5 @@ export default async ({ strapi }: { strapi: Strapi }) => {
     },
   ];
 
-  await strapi.admin.services.permission.actionProvider.registerMany(actions);
+  await strapi.service('admin::permission').actionProvider.registerMany(actions);
 };

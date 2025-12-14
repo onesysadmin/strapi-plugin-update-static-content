@@ -1,9 +1,7 @@
-import { useFetchClient } from '@strapi/helper-plugin';
+import { useFetchClient } from '@strapi/strapi/admin';
 import { useEffect, useState } from 'react';
 
 export default function useFetch<TData>(url: string): [TData, boolean, () => void] {
-  const abortController = new AbortController();
-  const { signal } = abortController;
   const [data, setData] = useState<TData>({} as TData);
   const [isLoading, setIsLoading] = useState(true);
   const [refetch, setRefetch] = useState({});
@@ -15,6 +13,9 @@ export default function useFetch<TData>(url: string): [TData, boolean, () => voi
   }
 
   useEffect(() => {
+    const abortController = new AbortController();
+    const { signal } = abortController;
+
     (async function fetch() {
       setIsLoading(true);
       try {
@@ -29,7 +30,7 @@ export default function useFetch<TData>(url: string): [TData, boolean, () => voi
     })();
 
     return () => abortController.abort();
-  }, [refetch]);
+  }, [refetch, url]);
 
   return [data, isLoading, handleRefetch];
 }

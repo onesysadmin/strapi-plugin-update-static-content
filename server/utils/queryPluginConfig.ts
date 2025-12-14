@@ -1,4 +1,4 @@
-import type { Strapi } from '@strapi/strapi';
+import type { Core } from '@strapi/strapi';
 import * as jose from 'jose';
 import pluginId from '../../admin/src/pluginId';
 import Config from '../../types/Config';
@@ -18,12 +18,12 @@ async function decryptToken(c : Config) {
   }
 }
 
-export async function queryPluginConfig(strapi: Strapi) {
+export async function queryPluginConfig(strapi: Core.Strapi) {
   try {
-    if (!strapi.entityService) {
-      throw new Error('Entity service not found');
+    if (!strapi.documents) {
+      throw new Error('Document service not found');
     }
-    const config = await strapi.entityService.findMany('plugin::update-static-content.config');
+    const config = await strapi.documents('plugin::update-static-content.config').findMany();
     if (!config) {
       throw new Error('Config not found');
     }
@@ -37,12 +37,14 @@ export async function queryPluginConfig(strapi: Strapi) {
 }
 
 
-export async function queryPluginConfigId(strapi: Strapi, id: string) {
+export async function queryPluginConfigId(strapi: Core.Strapi, id: string) {
   try {
-    if (!strapi.entityService) {
-      throw new Error('Entity service not found');
+    if (!strapi.documents) {
+      throw new Error('Document service not found');
     }
-    const config = await strapi.entityService.findOne('plugin::update-static-content.config', id) as Config | null;
+    const config = await strapi.documents('plugin::update-static-content.config').findOne({
+      documentId: id
+    }) as Config | null;
     if (!config) {
       throw new Error('Config not found');
     }

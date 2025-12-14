@@ -15,7 +15,7 @@ import {
 } from '@strapi/design-system';
 import { Plus, Trash } from '@strapi/icons';
 import { useState } from 'react';
-import { getFetchClient } from '@strapi/helper-plugin';
+import { useFetchClient } from '@strapi/strapi/admin';
 import { Link } from 'react-router-dom';
 import useFormattedLabel from '../../hooks/useFormattedLabel';
 import PageLoading from '../PageLoading';
@@ -25,7 +25,7 @@ import { ConfirmDialog } from '../ConfirmDialog';
 
 export default function ConfigsTable() {
   const [data, isDataLoading, refetchData] = useFetch<Config[]>(`/${pluginId}/config`);
-  const { del } = getFetchClient();
+  const { del } = useFetchClient();
 
   const [isConfirmDialogOpen, setIsConformDialogOpen] = useState<boolean>(false);
   const CONFIRM_DELETE_MESSAGE = useFormattedLabel('settings.table.confirmDelete.message');

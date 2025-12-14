@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex } from '@strapi/design-system';
-import { SettingsPageTitle } from '@strapi/helper-plugin';
+import { Page } from '@strapi/strapi/admin';
 import PageLoading from '../PageLoading';
 
 const PADDING_X = 10;
@@ -10,13 +10,13 @@ type Props = {
   children: React.ReactNode;
   baseHeaderLayout: JSX.Element;
   pageTitle: string;
-  isLoading: boolean;
+  isLoading?: boolean;
 };
 
 export default function PageWrapper({ children, baseHeaderLayout, pageTitle, isLoading }: Props) {
   return (
     <>
-      <SettingsPageTitle name={pageTitle} />
+      <Page.Title>{pageTitle}</Page.Title>
       {baseHeaderLayout}
       <Flex
         direction="column"

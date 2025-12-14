@@ -1,14 +1,14 @@
-import { BaseHeaderLayout, Flex, Link, TextInput, Typography, Button } from '@strapi/design-system';
+import { Flex, Link, TextInput, Typography, Button } from '@strapi/design-system';
 import { useState } from 'react';
 import PageWrapper from '../../components/PageWrapper';
 import useFormattedLabel from '../../hooks/useFormattedLabel';
-import { useFetchClient } from '@strapi/helper-plugin';
+import { Layouts, useFetchClient } from '@strapi/strapi/admin';
 import pluginId from '../../pluginId';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from '@strapi/icons';
 
 export default function AddNewWorkflow() {
-  const { goBack } = useHistory();
+  const navigate = useNavigate();
   const [workflow, setWorkflow] = useState('');
   const [branch, setBranch] = useState('');
   const [githubAccount, setGithubAccount] = useState('');
@@ -46,7 +46,7 @@ export default function AddNewWorkflow() {
   return (
     <PageWrapper
       baseHeaderLayout={
-        <BaseHeaderLayout
+        <Layouts.Header
           title={HEADER_TITLE}
           subtitle={HEADER_SUBTITLE}
           navigationAction={
@@ -70,7 +70,7 @@ export default function AddNewWorkflow() {
               workflow,
               branch,
             });
-            goBack();
+            navigate(-1);
           } else {
             console.error('Please fill all the fields');
           }
@@ -87,7 +87,7 @@ export default function AddNewWorkflow() {
             placeholder={PLACEHOLDER_GITHUB_TOKEN}
             required
             autoComplete="hidden"
-            HintMessage={
+            hint={
               <Typography variant="omega">
                 {HINT_GITHUB_TOKEN}{' '}
                 <Link
@@ -107,7 +107,7 @@ export default function AddNewWorkflow() {
             onChange={(e) => setGithubAccount(e.target.value)}
             placeholder={PLACEHOLDER_OWNER}
             required
-            HintMessage={<Typography variant="omega">{HINT_OWNER}</Typography>}
+            hint={<Typography variant="omega">{HINT_OWNER}</Typography>}
           />
           <TextInput
             type="text"
@@ -118,7 +118,7 @@ export default function AddNewWorkflow() {
             onChange={(e) => setRepo(e.target.value)}
             placeholder={PLACEHOLDER_REPO}
             required
-            HintMessage={<Typography variant="omega">{HINT_REPO}</Typography>}
+            hint={<Typography variant="omega">{HINT_REPO}</Typography>}
           />
           <TextInput
             type="text"
@@ -129,7 +129,7 @@ export default function AddNewWorkflow() {
             onChange={(e) => setBranch(e.target.value)}
             placeholder={PLACEHOLDER_BRANCH}
             required
-            HintMessage={<Typography variant="omega">{HINT_BRANCH}</Typography>}
+            hint={<Typography variant="omega">{HINT_BRANCH}</Typography>}
           />
           <TextInput
             type="text"
@@ -140,7 +140,7 @@ export default function AddNewWorkflow() {
             onChange={(e) => setWorkflow(e.target.value)}
             placeholder={PLACEHOLDER_WORKFLOWID}
             required
-            HintMessage={<Typography variant="omega">{HINT_WORKFLOWID}</Typography>}
+            hint={<Typography variant="omega">{HINT_WORKFLOWID}</Typography>}
           />
         </Flex>
 

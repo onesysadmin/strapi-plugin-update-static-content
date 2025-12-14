@@ -1,9 +1,7 @@
 import {
-  BaseHeaderLayout,
   Button,
   Flex,
   Popover,
-  Layout,
   Link,
   LinkButton,
   Table,
@@ -16,7 +14,7 @@ import {
   VisuallyHidden,
   Box,
 } from '@strapi/design-system';
-import { CheckPagePermissions, useFetchClient } from '@strapi/helper-plugin';
+import { Layouts, useFetchClient } from '@strapi/strapi/admin';
 import { ArrowLeft, Check, More, Plus, Refresh } from '@strapi/icons';
 import React, { useRef, useState } from 'react';
 import Config from '../../../../types/Config';
@@ -40,13 +38,7 @@ const THEAD_ITEMS = [
   <VisuallyHidden key="actions" />,
 ];
 
-export default function ProtectedPage() {
-  return (
-    <CheckPagePermissions permissions={pluginPermissions.trigger}>
-      <PluginPage />
-    </CheckPagePermissions>
-  );
-}
+export { PluginPage };
 
 type Data = {
   total_count?: number;
@@ -296,11 +288,11 @@ function PluginPage() {
   }
 
   return (
-    <Layout>
+    <Layouts.Root>
       <PageWrapper
         isLoading={isWorkflowsFetching}
         baseHeaderLayout={
-          <BaseHeaderLayout
+          <Layouts.Header
             title={HEADER_TITLE}
             subtitle={HEADER_SUBTITLE}
             navigationAction={
@@ -420,6 +412,6 @@ function PluginPage() {
           </Box>
         </Flex>
       </PageWrapper>
-    </Layout>
+    </Layouts.Root>
   );
 }

@@ -1,4 +1,4 @@
-# Update Static Content - Strapi v4
+# Update Static Content - Strapi v5
 
 <p align="center">Update your statically generated site with github actions (more coming on the way).</p>
 

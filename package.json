@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-update-static-content",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "An strapi plugin to rebuild and deploy your SSG website via Github Actions.",
   "strapi": {
     "name": "update-static-content",
@@ -12,7 +12,7 @@
     "build": "tsc -p tsconfig.server.json",
     "develop": "tsc -p tsconfig.server.json -w"
   },
-  "homepage": "https://github.com/everythinginjs/strapi-plugin-update-static-content#update-static-content---strapi-v4",
+  "homepage": "https://github.com/everythinginjs/strapi-plugin-update-static-content#update-static-content---strapi-v5",
   "bugs": {
     "url": "https://github.com/everythinginjs/strapi-plugin-update-static-content/issues"
   },
@@ -32,36 +32,40 @@
     }
   ],
   "engines": {
-    "node": ">=18.0.0 <=20.x.x",
+    "node": ">=18.0.0 <=22.x.x",
     "npm": ">=6.0.0"
   },
   "dependencies": {
-    "@strapi/design-system": "1.19.0",
-    "@strapi/helper-plugin": "4.25.4",
-    "@strapi/icons": "1.19.0",
+    "@strapi/design-system": "^2.0.0-rc.14",
+    "@strapi/icons": "^2.0.0-rc.14",
     "date-fns": "2.29.3",
     "jose": "^5.6.3",
-    "react-intl": "6.2.1"
+    "react-intl": "6.6.2"
   },
   "devDependencies": {
-    "@strapi/typescript-utils": "4.14.4",
-    "@types/react": "17.0.53",
-    "@types/react-dom": "18.2.25",
-    "@types/react-router-dom": "5.3.3",
-    "@types/styled-components": "5.1.26",
-    "eslint": "8.38.0",
-    "eslint-config-prettier": "8.8.0",
-    "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-react": "7.32.2",
-    "prettier": "2.8.7",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-router-dom": "5.3.4",
-    "styled-components": "5.3.6",
-    "typescript": "5.0.4"
+    "@strapi/sdk-plugin": "^5.0.0",
+    "@strapi/strapi": "^5.0.0",
+    "@strapi/typescript-utils": "^5.0.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-prettier": "5.2.1",
+    "eslint-plugin-react": "7.37.0",
+    "prettier": "3.3.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.22.0",
+    "styled-components": "^6.1.8",
+    "typescript": "5.3.3"
   },
   "peerDependencies": {
-    "styled-components": "5.3.6"
+    "@strapi/sdk-plugin": "^5.0.0",
+    "@strapi/strapi": "^5.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.22.0",
+    "styled-components": "^6.1.8"
   },
   "keywords": [
     "strapi",
