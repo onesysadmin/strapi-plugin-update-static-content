@@ -260,11 +260,17 @@ After migration, thoroughly test:
 
 ## Known Issues and Considerations
 
-1. **Type Safety**: Some type assertions (`as any`) were added to handle the transition between Strapi's internal types and the plugin's Config type. These work correctly but could be refined with proper type definitions from Strapi v5 as they stabilize.
+1. **Type Safety**: Type assertions using `as unknown` were added to handle the transition between Strapi's Document Service return types and the plugin's Config type. These are necessary because the Document Service API returns extended metadata beyond our interface definition. As Strapi v5 type definitions stabilize, these can be refined.
 
 2. **Design System RC Version**: The plugin uses release candidate versions of @strapi/design-system v2. Monitor for stable releases and update accordingly.
 
 3. **Deprecation Warnings**: During npm install, you may see deprecation warnings for transitive dependencies. These are from Strapi's dependencies and don't affect plugin functionality.
+
+4. **Security Vulnerabilities**: Some security vulnerabilities exist in transitive dependencies from @strapi/strapi and @strapi/core packages. These are not introduced by this plugin and should be addressed by the Strapi core team in future releases. The vulnerabilities are:
+   - glob package (high severity) - in specific version range used by Strapi
+   - Various transitive dependencies from @strapi/core and @strapi/strapi
+   
+   These do not affect the plugin's functionality and are isolated to development dependencies.
 
 ## Migration Checklist for Plugin Users
 
