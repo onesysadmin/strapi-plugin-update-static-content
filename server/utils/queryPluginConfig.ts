@@ -18,17 +18,18 @@ async function decryptToken(c : Config) {
   }
 }
 
-export async function queryPluginConfig(strapi: Core.Strapi) {
+export async function queryPluginConfig(strapi: Core.Strapi): Promise<Config[]> {
   try {
     if (!strapi.documents) {
       throw new Error('Document service not found');
     }
-    const config = await strapi.documents('plugin::update-static-content.config').findMany() as any;
-    if (!config) {
-      throw new Error('Config not found');
+    // Document Service returns records with extended metadata, cast to our Config type
+    const configs = await strapi.documents('plugin::update-static-content.config').findMany() as unknown as Config[];
+    if (!configs || configs.length === 0) {
+      return [];
     }
     
-    const processedConfig = await Promise.all((config as Config[]).map(decryptToken));
+    const processedConfig = await Promise.all(configs.map(decryptToken));
     return processedConfig;
   }
   catch (err) {
@@ -37,23 +38,25 @@ export async function queryPluginConfig(strapi: Core.Strapi) {
 }
 
 
-export async function queryPluginConfigId(strapi: Core.Strapi, id: string) {
+export async function queryPluginConfigId(strapi: Core.Strapi, id: string): Promise<Config> {
   try {
     if (!strapi.documents) {
       throw new Error('Document service not found');
     }
-    const result = await strapi.documents('plugin::update-static-content.config').findOne({
+    // Document Service returns records with extended metadata, cast to our Config type
+    const config = await strapi.documents('plugin::update-static-content.config').findOne({
       documentId: id
-    }) as any;
-    const config = result as Config | null;
+    }) as unknown as Config | null;
+    
     if (!config) {
       throw new Error('Config not found');
     }
-      const encryptedConfig = await decryptToken(config);
-      if (!encryptedConfig) {
-        throw new Error('Error encrypting token');
-      }
-      return encryptedConfig;
+    
+    const decryptedConfig = await decryptToken(config);
+    if (!decryptedConfig) {
+      throw new Error('Error decrypting token');
+    }
+    return decryptedConfig;
   }
   catch (err) {
     throw err;

@@ -14,8 +14,8 @@ type ConfirmDialogProps = {
 export function ConfirmDialog({ onToggleDialog, onConfirm, ...props }: ConfirmDialogProps) {
   return (
     <StrapiConfirmDialog
-      onToggleDialog={(e: any) => {
-        if (e?.target?.id === 'confirm-delete') {
+      onToggleDialog={(e?: Event | React.MouseEvent) => {
+        if (e && 'target' in e && e.target && typeof e.target === 'object' && 'id' in e.target && e.target.id === 'confirm-delete') {
           return;
         }
         onToggleDialog();
