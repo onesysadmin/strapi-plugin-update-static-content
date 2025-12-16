@@ -33,12 +33,12 @@ async function history(id: string, page=1) {
       }
     );
     return res;
-  } catch (err) {
+  } catch (err: any) {
     return {
-      status: err.response.status,
-      statusText: err.response.statusText,
+      status: err.response?.status || 500,
+      statusText: err.response?.statusText || err.message || 'Unknown error',
+    };
   }
-}
 }
 
 async function trigger(id: string) {
@@ -65,10 +65,10 @@ async function trigger(id: string) {
       }
     );
     return res;
-  } catch (err) {
+  } catch (err: any) {
     return {
-      status: err.response.status,
-      statusText: err.response.statusText,
+      status: err.response?.status || 500,
+      statusText: err.response?.statusText || err.message || 'Unknown error',
     };
   }
 }
@@ -94,10 +94,10 @@ async function triggerAll() {
         );
       })
     );
-  } catch (err) {
+  } catch (err: any) {
     return {
-      status: err.response.status,
-      statusText: err.response.statusText,
+      status: err.response?.status || 500,
+      statusText: err.response?.statusText || err.message || 'Unknown error',
     };
   }
 }
@@ -112,21 +112,31 @@ async function getLogs(jobId: string, id: string) {
       };
     }
     const { githubAccount, repo, githubToken } = config;
-    const res = await axios.get(
-      `https://api.github.com/repos/${githubAccount}/${repo}/actions/runs/${jobId}/logs`,
-      {
-        headers: {
-          Accept: 'application/vnd.github+json',
-          Authorization: `token ${githubToken}`,
-        },
-      }
-    );
-    return res.request.res.responseUrl;
-  } catch (err) {
-    console.log(err);
+    const url = `https://api.github.com/repos/${githubAccount}/${repo}/actions/runs/${jobId}/logs`;
+
+    // Make request with maxRedirects: 0 and validateStatus to capture 302 response
+    const res = await axios.get(url, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${githubToken}`,
+      },
+      maxRedirects: 0,
+      validateStatus: null,
+    });
+
+    // Return the Location header which contains the download URL
+    if (res.headers?.location) {
+      return res.headers.location;
+    }
+
     return {
-      status: err.response.status,
-      statusText: err.response.statusText,
+      status: 500,
+      statusText: 'No redirect location found',
+    };
+  } catch (err: any) {
+    return {
+      status: err.response?.status || 500,
+      statusText: err.response?.statusText || err.message || 'Unknown error',
     };
   }
 }

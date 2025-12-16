@@ -23,7 +23,7 @@
   "settings.fields.hint.branch": "Enter the desired `branch`",
   "settings.fields.hint.roles": "Roles that have access to the plugin",
 
-  "settings.fields.placeholder.githubtoken": "ghp_*******",
+  "settings.fields.placeholder.githubtoken": "github_pat_*******",
   "settings.fields.placeholder.owner": "evrythinginjs",
   "settings.fields.placeholder.repo": "my-static-website",
   "settings.fields.placeholder.branch": "main",
@@ -34,26 +34,28 @@
   "plugin.headers.subtitle": "Rebuild and deploy your site manually",
 
   "settings.table.footer.label": "Add another workflow",
-  
+  "settings.buttons.addWorkflow": "Add Workflow",
+
   "plugin.buttons.secondary": "Visit",
   "plugin.buttons.primary": "Trigger",
   "plugin.buttons.triggerAllWorkflows": "Trigger All Workflows",
   "plugin.missingConfig.message": "Please, setup the following plugin configuration → ",
   "plugin.missingConfig.button": "Plugin Settings",
-  
+
   "plugin.toast.success.title": "Successfully Triggered",
   "plugin.toast.success.description": "Your workflow_dispatch event already started to progress.",
-  
+
   "plugin.toast.failure.unknown.title": "Unknown Error",
   "plugin.toast.failure.unknown.description": "Something goes wrong try later",
-  
+
   "plugin.toast.failure.unprocessableEntity.title": "Event Error",
   "plugin.toast.failure.unprocessableEntity.description": "Your workflow_dispatch event is disabled.",
-  
-  
+
+
   "settings.table.confirmDelete.title": "Delete workflow configuration?",
   "settings.table.confirmDelete.message": "Are you sure you want to delete this config?",
   "settings.table.confirmDelete.confirm": "Yes, delete",
+  "settings.table.empty.content": "No workflows configured yet. Add your first workflow to get started.",
 
   "configModal.title": "Confirm Action",
   "configModal.cancel": "Cancel",
@@ -68,5 +70,5 @@
   "button.save": "Save",
   "button.details": "Details",
   "confirm.message": "Do you confirm to trigger this action ?"
-  
+
 }

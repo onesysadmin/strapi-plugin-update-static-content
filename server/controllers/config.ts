@@ -1,6 +1,6 @@
 import type { Core } from '@strapi/strapi';
 import * as jose from 'jose';
-import pluginId from '../../admin/src/pluginId';
+import { pluginId } from '../../admin/src/pluginId';
 import {queryPluginConfig, queryPluginConfigId} from '../utils/queryPluginConfig';
 import {validateConfig} from '../validators/validateConfig';
 import Config from '../../types/Config';
@@ -13,6 +13,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       ctx.body = pluginConfig.map((c) => {
         return {
           id: c.id,
+          documentId: c.documentId,
           githubToken: c.githubToken.replace(/./g, '*'),
           githubAccount: c.githubAccount,
           repo: c.repo,

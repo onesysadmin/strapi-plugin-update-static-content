@@ -1,25 +1,23 @@
 import type { Core } from '@strapi/strapi';
-import pluginName from '../admin/src/pluginId';
+import permissions from './permissions';
+
+const PLUGIN_NAME = 'update-static-content';
 
 export default async ({ strapi }: { strapi: Core.Strapi }) => {
-  if (typeof strapi.admin == 'undefined') return;
-
   const actions = [
     {
       section: 'plugins',
-      subCategory: 'general',
       displayName: 'Trigger builds',
-      uid: 'trigger',
-      pluginName,
+      uid: permissions.workflows.trigger,
+      pluginName: PLUGIN_NAME,
     },
     {
-      section: 'settings',
-      category: pluginName,
+      section: 'plugins',
       displayName: 'Access settings',
-      uid: 'settings',
-      pluginName,
+      uid: permissions.settings.access,
+      pluginName: PLUGIN_NAME,
     },
   ];
 
-  await strapi.service('admin::permission').actionProvider.registerMany(actions);
+  await strapi.admin.services.permission.actionProvider.registerMany(actions);
 };

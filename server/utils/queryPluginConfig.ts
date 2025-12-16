@@ -1,6 +1,6 @@
 import type { Core } from '@strapi/strapi';
 import * as jose from 'jose';
-import pluginId from '../../admin/src/pluginId';
+import { pluginId } from '../../admin/src/pluginId';
 import Config from '../../types/Config';
 
 async function decryptToken(c : Config) {

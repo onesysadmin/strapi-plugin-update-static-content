@@ -1,63 +1,57 @@
-import { prefixPluginTranslations } from '@strapi/strapi/admin';
-
-import pluginPkg from '../../package.json';
-import pluginId from './pluginId';
+import * as pluginPkg from '../../package.json';
+import { pluginId } from './pluginId';
 import pluginPermissions from './permissions';
+import { prefixPluginTranslations } from './utils/prefixPluginTranslations';
+import { StrapiApp } from '@strapi/strapi/admin';
 import PluginIcon from './components/PluginIcon';
 
-const name = pluginPkg.strapi.displayName;
+const { displayName } = pluginPkg.strapi;
 
 export default {
-  register(app: any) {
+  register(app: StrapiApp) {
     app.addMenuLink({
       to: `plugins/${pluginId}`,
       icon: PluginIcon,
       intlLabel: {
         id: `${pluginId}.plugin.name`,
-        defaultMessage: name,
+        defaultMessage: displayName,
       },
-      Component: async () => {
-        const { PluginPage } = await import('./pages/PluginPage');
-        return PluginPage;
-      },
+      Component: () => import('./pages/App'),
       permissions: pluginPermissions.trigger,
     });
-    
-    app.createSettingSection(
+
+    app.registerPlugin({
+      id: pluginId,
+      name: pluginId,
+    });
+  },
+
+  bootstrap(app: StrapiApp) {
+    app.addSettingsLink(
       {
         id: pluginId,
         intlLabel: {
           id: `${pluginId}.settings.title`,
-          defaultMessage: name,
+          defaultMessage: displayName,
         },
       },
-      [
-        {
-          id: pluginId,
-          intlLabel: {
-            id: `${pluginId}.settings.subtitle.link`,
-            defaultMessage: 'Configuration',
-          },
-          to: `settings/${pluginId}`,
-          Component: async () => {
-            const { SettingPage } = await import('./pages/SettingPage');
-            return SettingPage;
-          },
-          permissions: pluginPermissions.settings,
+      {
+        id: `${pluginId}.config`,
+        intlLabel: {
+          id: `${pluginId}.settings.config`,
+          defaultMessage: "Configuration",
         },
-      ]
+        to: pluginId,
+        Component: () => import("./pages/Settings"),
+        permissions: pluginPermissions.settings,
+      },
     );
 
-    app.registerPlugin({
-      id: pluginId,
-      name,
-    });
   },
 
-  async registerTrads(app: any) {
-    const { locales } = app;
+  async registerTrads({ locales }: { locales: string[] }) {
     const importedTrads = await Promise.all(
-      (locales as any[]).map((locale) => {
+      locales.map((locale) => {
         return import(`./translations/${locale}.json`)
           .then(({ default: data }) => {
             return {
@@ -71,7 +65,7 @@ export default {
               locale,
             };
           });
-      })
+      }),
     );
 
     return Promise.resolve(importedTrads);

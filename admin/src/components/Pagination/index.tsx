@@ -1,6 +1,5 @@
-import { Flex, IconButton, Button } from '@strapi/design-system';
+import { Flex, Button } from '@strapi/design-system';
 import { ChevronLeft, ChevronRight, More } from '@strapi/icons';
-import useFormattedLabel from '../../hooks/useFormattedLabel';
 
 interface PaginationProps {
   page: number;
@@ -28,8 +27,7 @@ export function Pagination({ page, numberOfItems, setPage, maxPerPage }: Paginat
         key={item}
         size="L"
         onClick={() => setPage(item)}
-        label={`${item}`}
-        variant={item === page ? 'tertiary' : 'ghost'}	
+        variant={item === page ? 'tertiary' : 'ghost'}
       >
         {item}
       </Button>
@@ -38,9 +36,13 @@ export function Pagination({ page, numberOfItems, setPage, maxPerPage }: Paginat
 
   return (
     <Flex gap={2}>
-      <IconButton size="L" onClick={handlePrevPage} label={useFormattedLabel('pagination.prev')} disabled={page === 1}>
-        <ChevronLeft />
-      </IconButton>
+      <Button
+        size="L"
+        onClick={handlePrevPage}
+        disabled={page === 1}
+        variant="ghost"
+        startIcon={<ChevronLeft />}
+      />
       {
         pagesArray.length > 5 ? (
             <>
@@ -52,9 +54,13 @@ export function Pagination({ page, numberOfItems, setPage, maxPerPage }: Paginat
             pagesArray
             )
       }
-      <IconButton size="L" onClick={handleNextPage} label={useFormattedLabel('pagination.next')} disabled={page === totalPages}>
-        <ChevronRight />
-      </IconButton>
+      <Button
+        size="L"
+        onClick={handleNextPage}
+        disabled={page === totalPages}
+        variant="ghost"
+        startIcon={<ChevronRight />}
+      />
     </Flex>
   );
 }

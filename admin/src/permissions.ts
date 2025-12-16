@@ -1,18 +1,10 @@
-import pluginId from './pluginId';
+import permissions from '../../server/permissions';
 
-const pluginPermissions = {
-  settings: [
-    {
-      action: `plugin::${pluginId}.settings`,
-      subject: null,
-    },
-  ],
+export default {
   trigger: [
-    {
-      action: `plugin::${pluginId}.trigger`,
-      subject: null,
-    },
+    { action: permissions.render(permissions.workflows.trigger), subject: null },
+  ],
+  settings: [
+    { action: permissions.render(permissions.settings.access), subject: null },
   ],
 };
-
-export default pluginPermissions;

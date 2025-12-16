@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-update-static-content",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "An strapi plugin to rebuild and deploy your SSG website via Github Actions.",
   "strapi": {
     "name": "update-static-content",
@@ -8,9 +8,32 @@
     "kind": "plugin",
     "displayName": "Update Static Content"
   },
+  "exports": {
+    "./package.json": "./package.json",
+    "./strapi-admin": {
+      "types": "./dist/admin/src/index.d.ts",
+      "source": "./admin/src/index.ts",
+      "import": "./dist/admin/index.mjs",
+      "require": "./dist/admin/index.js",
+      "default": "./dist/admin/index.js"
+    },
+    "./strapi-server": {
+      "types": "./dist/server/index.d.ts",
+      "source": "./server/index.ts",
+      "import": "./dist/server/index.mjs",
+      "require": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc -p tsconfig.server.json",
-    "develop": "tsc -p tsconfig.server.json -w"
+    "build": "strapi-plugin build",
+    "build:admin": "tsc -p ./admin/tsconfig.json",
+    "watch": "strapi-plugin watch",
+    "watch:link": "strapi-plugin watch:link",
+    "verify": "strapi-plugin verify"
   },
   "homepage": "https://github.com/everythinginjs/strapi-plugin-update-static-content#update-static-content---strapi-v5",
   "bugs": {
@@ -32,7 +55,7 @@
     }
   ],
   "engines": {
-    "node": ">=18.0.0 <=22.x.x",
+    "node": ">=18.0.0 <=24.x.x",
     "npm": ">=6.0.0"
   },
   "dependencies": {
@@ -57,7 +80,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.22.0",
     "styled-components": "^6.1.8",
-    "typescript": "5.3.3"
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "@strapi/sdk-plugin": "^5.3.0",

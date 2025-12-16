@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from '@strapi/design-system/Alert';
+import { Alert } from '@strapi/design-system';
 
 const stickyStyle = {
   position: 'fixed',
