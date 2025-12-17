@@ -56,6 +56,8 @@
   "settings.table.confirmDelete.message": "Are you sure you want to delete this config?",
   "settings.table.confirmDelete.confirm": "Yes, delete",
   "settings.table.empty.content": "No workflows configured yet. Add your first workflow to get started.",
+  "plugin.empty.content": "No workflows configured yet.",
+  "plugin.empty.action": "Add Workflow",
 
   "configModal.title": "Confirm Action",
   "configModal.cancel": "Cancel",
