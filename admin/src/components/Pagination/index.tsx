@@ -35,14 +35,17 @@ export function Pagination({ page, numberOfItems, setPage, maxPerPage }: Paginat
   })
 
   return (
-    <Flex gap={2}>
+    <Flex gap={2} alignItems="center" justifyContent="center">
       <Button
         size="L"
         onClick={handlePrevPage}
         disabled={page === 1}
         variant="ghost"
-        startIcon={<ChevronLeft />}
-      />
+      >
+        <Flex alignItems="center" justifyContent="center">
+          <ChevronLeft />
+        </Flex>
+      </Button>
       {
         pagesArray.length > 5 ? (
             <>
@@ -59,8 +62,11 @@ export function Pagination({ page, numberOfItems, setPage, maxPerPage }: Paginat
         onClick={handleNextPage}
         disabled={page === totalPages}
         variant="ghost"
-        startIcon={<ChevronRight />}
-      />
+      >
+        <Flex alignItems="center" justifyContent="center">
+          <ChevronRight />
+        </Flex>
+      </Button>
     </Flex>
   );
 }

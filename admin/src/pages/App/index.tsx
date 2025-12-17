@@ -1,7 +1,7 @@
 import {
   Button,
   Flex,
-  Popover,
+  Menu,
   Link,
   LinkButton,
   Table,
@@ -13,10 +13,13 @@ import {
   Typography,
   VisuallyHidden,
   Box,
+  EmptyStateLayout,
 } from '@strapi/design-system';
+import { EmptyDocuments } from '@strapi/icons/symbols';
 import { Layouts, Page, useFetchClient } from '@strapi/strapi/admin';
 import { ArrowLeft, Check, More, Plus, ArrowClockwise } from '@strapi/icons';
 import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Config from '../../../../types/Config';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 import CustomRow from '../../components/CustomRow';
@@ -60,6 +63,7 @@ type Toast = {
 
 function App() {
   // Hooks
+  const navigate = useNavigate();
   const [loadingTriggerButton, setLoadingTriggerButton] = useState(false);
   const [toastMsg, setToastMsg] = useState<Toast>({} as Toast);
   const [toastToggle, setToastToggle] = useState(false);
@@ -71,6 +75,9 @@ function App() {
   const [page, setPage] = useState(1);
 
   const [selectedWorkflow, setSelectedWorkflow] = useState<string>();
+
+  const hasWorkflows = Array.isArray(workflows) && workflows.length > 0;
+
   const [data, isLoading, handleRefetch] = useFetch<Data>(
     `/${pluginId}/github-actions-history/${selectedWorkflow || '0'}?page=${page}`
   );
@@ -104,6 +111,8 @@ function App() {
   const SEE_MORE_BUTTON = useFormattedLabel('button.seeMore');
   const REFRESH_BUTTON = useFormattedLabel('button.refresh');
   const BACK_BUTTON = useFormattedLabel('button.back');
+  const EMPTY_STATE_CONTENT = useFormattedLabel('plugin.empty.content');
+  const EMPTY_STATE_ACTION = useFormattedLabel('plugin.empty.action');
 
   const [isConfirmOneDialogOpen, setIsConfirmOneDialogOpen] = useState<boolean>(false);
   const [isConfirmAllDialogOpen, setIsConfirmAllDialogOpen] = useState<boolean>(false);
@@ -205,15 +214,7 @@ function App() {
   function Actions() {
     const PRIMARY_ACTION_BUTTON = useFormattedLabel('plugin.buttons.primary');
     const TRIGGER_ALL_WORKFLOWS_BUTTON = useFormattedLabel('plugin.buttons.triggerAllWorkflows');
-
     const CONFIRM_MSG = useFormattedLabel('confirm.message');
-
-    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-    const PopoverButton = useRef<HTMLButtonElement>(null);
-
-    function HandleTogglePopover() {
-      setIsPopoverOpen((prev) => !prev);
-    }
 
     return (
       <Flex gap={3}>
@@ -243,7 +244,7 @@ function App() {
           variantRightButton={'success-light'}
           iconRightButton={<Check />}
         />
-        <Flex background="buttonPrimary600" hasRadius ref={PopoverButton}>
+        <Flex background="buttonPrimary600" hasRadius>
           <Button
             onClick={toggleConfirmOneDialog}
             variant="default"
@@ -253,17 +254,19 @@ function App() {
             {PRIMARY_ACTION_BUTTON}
           </Button>
           <Flex height="15px" width="1px" background="primary500"></Flex>
-          <Button label={useFormattedLabel('button.seeMore')} onClick={HandleTogglePopover}>
-            <More />
-          </Button>
+          <Menu.Root>
+            <Menu.Trigger style={{ background: 'inherit', borderRadius: 'inherit' }}>
+              <Button variant="default" style={{ minWidth: 'unset', padding: '8px 12px' }}>
+                <More />
+              </Button>
+            </Menu.Trigger>
+            <Menu.Content>
+              <Menu.Item onSelect={toggleConfirmAllDialog}>
+                {TRIGGER_ALL_WORKFLOWS_BUTTON}
+              </Menu.Item>
+            </Menu.Content>
+          </Menu.Root>
         </Flex>
-        {isPopoverOpen && (
-          <Popover as={Flex} source={PopoverButton} onDismiss={HandleTogglePopover} padding={1}>
-            <Button variant="ghost" onClick={toggleConfirmAllDialog}>
-              {TRIGGER_ALL_WORKFLOWS_BUTTON}
-            </Button>
-          </Popover>
-        )}
         <ConfirmDialog
           bodyText={{
             id: 'confirm.message',
@@ -294,6 +297,38 @@ function App() {
     );
   }
 
+  if (!hasWorkflows) {
+    return (
+      <Layouts.Root>
+        <Page.Main>
+          <Page.Title>{TITLE}</Page.Title>
+          <Layouts.Header
+            title={HEADER_TITLE}
+            subtitle={HEADER_SUBTITLE}
+          />
+          <Layouts.Content>
+            {toastToggle && <ToastMsg {...toastMsg} closeToastHandler={() => setToastToggle(false)} />}
+            <Box background="neutral0" shadow="tableShadow" hasRadius width="100%">
+              <EmptyStateLayout
+                icon={<EmptyDocuments width="160px" />}
+                content={EMPTY_STATE_CONTENT}
+                action={
+                  <Button
+                    variant="secondary"
+                    startIcon={<Plus />}
+                    onClick={() => navigate(`/settings/${pluginId}`)}
+                  >
+                    {EMPTY_STATE_ACTION}
+                  </Button>
+                }
+              />
+            </Box>
+          </Layouts.Content>
+        </Page.Main>
+      </Layouts.Root>
+    );
+  }
+
   return (
     <Layouts.Root>
       <Page.Main>
@@ -301,118 +336,117 @@ function App() {
         <Layouts.Header
           title={HEADER_TITLE}
           subtitle={HEADER_SUBTITLE}
-          navigationAction={
-            <Link to="/" startIcon={<ArrowLeft />}>
-              {BACK_BUTTON}
-            </Link>
-          }
           primaryAction={<Actions />}
         />
         <Layouts.Content>
           {toastToggle && <ToastMsg {...toastMsg} closeToastHandler={() => setToastToggle(false)} />}
           <Flex gap={3} alignItems="start" width="100%" overflowX="auto" direction="column">
-            <Flex
-              gap={3}
-              background="neutral0"
-              shadow="tableShadow"
-              hasRadius
-              padding={4}
-              alignItems="start"
-              overflowX="auto"
-            >
-              {workflows.map((workflow, index) => {
-                if (!selectedWorkflow && workflows[0].documentId) {
-                  setSelectedWorkflow(workflows[0].documentId);
-                }
-                return (
-                  <Button
-                    onClick={() => handleSelectWorkflow(workflow.documentId!)}
-                    variant={selectedWorkflow === workflow.documentId ? 'primary' : 'ghost'}
-                    size="L"
-                    loading={isWorkflowsFetching}
-                    width="100%"
-                    key={workflow.documentId ?? index}
-                  >
-                    <p
-                      style={{
-                        width: '100%',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
+              <Flex
+                gap={3}
+                background="neutral0"
+                shadow="tableShadow"
+                hasRadius
+                padding={4}
+                alignItems="start"
+                overflowX="auto"
+              >
+                {workflows.map((workflow, index) => {
+                  if (!selectedWorkflow && workflows[0].documentId) {
+                    setSelectedWorkflow(workflows[0].documentId);
+                  }
+                  return (
+                    <Button
+                      onClick={() => handleSelectWorkflow(workflow.documentId!)}
+                      variant={selectedWorkflow === workflow.documentId ? 'primary' : 'ghost'}
+                      size="L"
+                      loading={isWorkflowsFetching}
+                      width="100%"
+                      key={workflow.documentId ?? index}
                     >
-                      {workflow.workflow}
-                    </p>
-                  </Button>
-                );
-              })}
-              <LinkButton to={`/settings/${pluginId}`} variant="ghost" size="L">
-                <Plus />
-              </LinkButton>
-            </Flex>
-            <Box background="neutral0" shadow="tableShadow" hasRadius width="100%">
-              {isLoading || !data.workflow_runs ? (
-                <Flex
-                  width="100%"
-                  justifyContent="center"
-                  alignItems="center"
-                  paddingTop="5em"
-                  paddingBottom="5em"
+                      <p
+                        style={{
+                          width: '100%',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {workflow.workflow}
+                      </p>
+                    </Button>
+                  );
+                })}
+                <Button
+                  variant="ghost"
+                  size="L"
+                  onClick={() => navigate(`/settings/${pluginId}`)}
                 >
-                  <PageLoading />
-                </Flex>
-              ) : (
-                <>
-                  <Table colCount={6} rowCount={data.workflow_runs.length}>
-                    <Thead>
-                      <Tr>
-                        {THEAD_ITEMS.map((title, i) => (
-                          <Th key={i}>
-                            <Typography variant="sigma">{title}</Typography>
-                          </Th>
-                        ))}
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {data.workflow_runs.map(
-                        ({
-                          id,
-                          conclusion,
-                          name,
-                          run_number,
-                          run_started_at,
-                          html_url,
-                          updated_at,
-                          created_at,
-                        }) => {
-                          return (
-                            <CustomRow
-                              key={id}
-                              id={id}
-                              workflowId={selectedWorkflow || '0'}
-                              conclusion={conclusion}
-                              name={name}
-                              run_number={run_number}
-                              run_started_at={run_started_at}
-                              html_url={html_url}
-                              updated_at={updated_at}
-                              created_at={created_at}
-                            />
-                          );
-                        }
-                      )}
-                    </Tbody>
-                  </Table>
-                  <Flex marginTop={3} direction="column" alignItems="end" width="100%">
-                    <Pagination
-                      page={page}
-                      setPage={handleSetPage}
-                      numberOfItems={numberOfItems}
-                      maxPerPage={maxPerPage}
-                    />
+                  <Plus />
+                </Button>
+              </Flex>
+              <Box background="neutral0" shadow="tableShadow" hasRadius width="100%">
+                {isLoading || !data.workflow_runs ? (
+                  <Flex
+                    width="100%"
+                    justifyContent="center"
+                    alignItems="center"
+                    paddingTop="5em"
+                    paddingBottom="5em"
+                  >
+                    <PageLoading />
                   </Flex>
-                </>
-              )}
-            </Box>
+                ) : (
+                  <>
+                    <Table colCount={6} rowCount={data.workflow_runs.length}>
+                      <Thead>
+                        <Tr>
+                          {THEAD_ITEMS.map((title, i) => (
+                            <Th key={i}>
+                              <Typography variant="sigma">{title}</Typography>
+                            </Th>
+                          ))}
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {data.workflow_runs.map(
+                          ({
+                            id,
+                            conclusion,
+                            name,
+                            run_number,
+                            run_started_at,
+                            html_url,
+                            updated_at,
+                            created_at,
+                          }) => {
+                            return (
+                              <CustomRow
+                                key={id}
+                                id={id}
+                                workflowId={selectedWorkflow || '0'}
+                                conclusion={conclusion}
+                                name={name}
+                                run_number={run_number}
+                                run_started_at={run_started_at}
+                                html_url={html_url}
+                                updated_at={updated_at}
+                                created_at={created_at}
+                              />
+                            );
+                          }
+                        )}
+                      </Tbody>
+                    </Table>
+                    <Flex marginTop={3} paddingBottom={4} direction="column" alignItems="center" width="100%">
+                      <Pagination
+                        page={page}
+                        setPage={handleSetPage}
+                        numberOfItems={numberOfItems}
+                        maxPerPage={maxPerPage}
+                      />
+                    </Flex>
+                  </>
+                )}
+              </Box>
           </Flex>
         </Layouts.Content>
       </Page.Main>
