@@ -30,7 +30,6 @@
   ],
   "scripts": {
     "build": "strapi-plugin build",
-    "build:admin": "tsc -p ./admin/tsconfig.json",
     "watch": "strapi-plugin watch",
     "watch:link": "strapi-plugin watch:link",
     "verify": "strapi-plugin verify"
@@ -61,7 +60,7 @@
   "dependencies": {
     "@strapi/design-system": "^2.0.0",
     "@strapi/icons": "^2.0.0",
-    "date-fns": "^2.30.0",
+    "date-fns": "^4.1.0",
     "jose": "^5.6.3",
     "react-intl": "^6.6.0"
   },
@@ -71,11 +70,6 @@
     "@strapi/typescript-utils": "^5.32.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "eslint": "8.57.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-prettier": "5.2.1",
-    "eslint-plugin-react": "7.37.0",
-    "prettier": "3.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.22.0",
