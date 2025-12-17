@@ -95,5 +95,8 @@
     "strapi-plugin",
     "github-actions",
     "plugin"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
 }
