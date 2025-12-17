@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Tooltip, IconButton, IconButtonGroup, Tr, Td } from '@strapi/design-system';
+import { Button, Flex, Tr, Td, Typography } from '@strapi/design-system';
 import { differenceInMilliseconds, formatRelative } from 'date-fns';
 import { Eye, ExternalLink } from '@strapi/icons';
 import Label from '../Label';
-import pluginId from '../../pluginId';
-import { useFetchClient } from '@strapi/helper-plugin';
+import { pluginId } from '../../pluginId';
+import { useFetchClient } from '@strapi/strapi/admin';
 
 type Props = {
   id: number;
+  workflowId: string;
   conclusion: 'success' | 'failure';
   name: string;
   run_number: number;
@@ -19,6 +20,7 @@ type Props = {
 
 export default function CustomRow({
   id,
+  workflowId,
   conclusion,
   name,
   run_number,
@@ -35,15 +37,20 @@ export default function CustomRow({
   const secs = (msDiffResult / 1000) % 60;
   const creationDate = formatRelative(new Date(created_at), new Date());
 
-  async function logsHandler(id: number) {
+  async function logsHandler(jobId: number) {
     setDisabledLogsButton(true);
     try {
-      let logsUrl = await get(`/${pluginId}/github-actions-jobs-log`, {
+      const response = await get(`/${pluginId}/github-actions-jobs-log/${workflowId}`, {
         params: {
-          jobId: id,
+          jobId,
         },
       });
-      window.open(`${logsUrl.data}`, '_blank');
+      const logsUrl = response.data?.url;
+      if (typeof logsUrl === 'string' && logsUrl.startsWith('http')) {
+        window.open(logsUrl, '_blank');
+      } else {
+        console.error('Invalid logs URL received:', response.data);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -52,28 +59,39 @@ export default function CustomRow({
   }
 
   return (
-    <Tr aria-rowindex={id}>
-      <Td>{run_number}</Td>
-      <Td>{name}</Td>
-      <Td>{conclusion ? Label(conclusion) : '-'}</Td>
-      <Td>{creationDate}</Td>
-      {!isThereAConclusion ? <Td>in progress</Td> : <Td>{`${mins ? mins + 'm' : ''} ${secs}s`}</Td>}
+    <Tr key={id}>
       <Td>
-        <IconButtonGroup>
-          <Tooltip description="logs">
-            <IconButton
-              disabled={disabledLogsButton}
-              aria-label="logs"
-              onClick={() => logsHandler(id)}
-              icon={<Eye />}
-            />
-          </Tooltip>
-          <Tooltip description="view more">
-            <a href={html_url} target="_blank" rel="noreferrer">
-              <IconButton aria-label="view more" icon={<ExternalLink />} />
-            </a>
-          </Tooltip>
-        </IconButtonGroup>
+        <Typography textColor="neutral800">{run_number}</Typography>
+      </Td>
+      <Td>
+        <Typography textColor="neutral800">{name}</Typography>
+      </Td>
+      <Td>{conclusion ? Label(conclusion) : <Typography textColor="neutral800">-</Typography>}</Td>
+      <Td>
+        <Typography textColor="neutral800">{creationDate}</Typography>
+      </Td>
+      <Td>
+        <Typography textColor="neutral800">
+          {!isThereAConclusion ? 'in progress' : `${mins ? mins + 'm' : ''} ${secs}s`}
+        </Typography>
+      </Td>
+      <Td>
+        <Flex gap={1}>
+          <Button
+            variant="ghost"
+            disabled={disabledLogsButton}
+            onClick={() => logsHandler(id)}
+            startIcon={<Eye />}
+          />
+          <Button
+            variant="ghost"
+            tag="a"
+            href={html_url}
+            target="_blank"
+            rel="noreferrer"
+            startIcon={<ExternalLink />}
+          />
+        </Flex>
       </Td>
     </Tr>
   );

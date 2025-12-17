@@ -1,7 +1,7 @@
-import type { Strapi } from '@strapi/strapi';
-import pluginId from '../../admin/src/pluginId';
+import type { Core } from '@strapi/strapi';
+import { pluginId } from '../../admin/src/pluginId';
 
-export default ({ strapi }: { strapi: Strapi }) => ({
+export default ({ strapi }: { strapi: Core.Strapi }) => ({
   history: async (ctx) => {
     const { id } = ctx.params;
     const { page } = ctx.request.query;
@@ -23,7 +23,16 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   log: async (ctx) => {
     const { id } = ctx.params;
     const { jobId } = ctx.request.query;
-    const logURL = await strapi.plugin(pluginId).service('githubActions').getLogs(jobId, id);
-    ctx.body = logURL;
+    const response = await strapi.plugin(pluginId).service('githubActions').getLogs(jobId, id);
+
+    // Check if response is an error object
+    if (response && typeof response === 'object' && response.status) {
+      ctx.status = response.status;
+      ctx.body = { error: response.statusText };
+      return;
+    }
+
+    // Return URL in a JSON object
+    ctx.body = { url: response };
   },
 });

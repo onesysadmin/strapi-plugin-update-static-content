@@ -24,7 +24,6 @@
     "strapi": true
   },
   "rules": {
-    "prettier/prettier": "error",
     "indent": "off",
     "linebreak-style": ["error", "unix"],
     "no-console": 0,

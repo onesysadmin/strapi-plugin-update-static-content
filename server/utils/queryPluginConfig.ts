@@ -1,6 +1,6 @@
-import type { Strapi } from '@strapi/strapi';
+import type { Core } from '@strapi/strapi';
 import * as jose from 'jose';
-import pluginId from '../../admin/src/pluginId';
+import { pluginId } from '../../admin/src/pluginId';
 import Config from '../../types/Config';
 
 async function decryptToken(c : Config) {
@@ -18,17 +18,18 @@ async function decryptToken(c : Config) {
   }
 }
 
-export async function queryPluginConfig(strapi: Strapi) {
+export async function queryPluginConfig(strapi: Core.Strapi): Promise<Config[]> {
   try {
-    if (!strapi.entityService) {
-      throw new Error('Entity service not found');
+    if (!strapi.documents) {
+      throw new Error('Document service not found');
     }
-    const config = await strapi.entityService.findMany('plugin::update-static-content.config');
-    if (!config) {
-      throw new Error('Config not found');
+    // Document Service returns records with extended metadata, cast to our Config type
+    const configs = await strapi.documents('plugin::update-static-content.config').findMany() as unknown as Config[];
+    if (!configs || configs.length === 0) {
+      return [];
     }
     
-    const processedConfig = await Promise.all(config.map(decryptToken));
+    const processedConfig = await Promise.all(configs.map(decryptToken));
     return processedConfig;
   }
   catch (err) {
@@ -37,20 +38,25 @@ export async function queryPluginConfig(strapi: Strapi) {
 }
 
 
-export async function queryPluginConfigId(strapi: Strapi, id: string) {
+export async function queryPluginConfigId(strapi: Core.Strapi, id: string): Promise<Config> {
   try {
-    if (!strapi.entityService) {
-      throw new Error('Entity service not found');
+    if (!strapi.documents) {
+      throw new Error('Document service not found');
     }
-    const config = await strapi.entityService.findOne('plugin::update-static-content.config', id) as Config | null;
+    // Document Service returns records with extended metadata, cast to our Config type
+    const config = await strapi.documents('plugin::update-static-content.config').findOne({
+      documentId: id
+    }) as unknown as Config | null;
+    
     if (!config) {
       throw new Error('Config not found');
     }
-      const encryptedConfig = await decryptToken(config);
-      if (!encryptedConfig) {
-        throw new Error('Error encrypting token');
-      }
-      return encryptedConfig;
+    
+    const decryptedConfig = await decryptToken(config);
+    if (!decryptedConfig) {
+      throw new Error('Error decrypting token');
+    }
+    return decryptedConfig;
   }
   catch (err) {
     throw err;

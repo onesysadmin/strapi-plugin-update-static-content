@@ -1,67 +1,57 @@
-import { prefixPluginTranslations } from '@strapi/helper-plugin';
-
-import pluginPkg from '../../package.json';
-import pluginId from './pluginId';
+import * as pluginPkg from '../../package.json';
+import { pluginId } from './pluginId';
 import pluginPermissions from './permissions';
-import Initializer from './components/Initializer';
+import { prefixPluginTranslations } from './utils/prefixPluginTranslations';
+import { StrapiApp } from '@strapi/strapi/admin';
 import PluginIcon from './components/PluginIcon';
 
-const name = pluginPkg.strapi.displayName;
+const { displayName } = pluginPkg.strapi;
 
 export default {
-  register(app: any) {
+  register(app: StrapiApp) {
     app.addMenuLink({
-      to: `/plugins/${pluginId}`,
+      to: `plugins/${pluginId}`,
       icon: PluginIcon,
       intlLabel: {
         id: `${pluginId}.plugin.name`,
-        defaultMessage: name,
+        defaultMessage: displayName,
       },
-      Component: async () => {
-        const component = await import('./pages/App');
-
-        return component;
-      },
-      //permissions: [pluginPermissions.trigger],
+      Component: () => import('./pages/App'),
+      permissions: pluginPermissions.trigger,
     });
-    const pluginPrefix = `${pluginId}.settings`;
-    app.createSettingSection(
-      {
-        id: pluginPrefix,
-        intlLabel: {
-          id: `${pluginPrefix}.title`,
-          defaultMessage: name,
-        },
-      },
-      [
-        {
-          id: pluginPrefix,
-          intlLabel: {
-            id: `${pluginPrefix}.subtitle.link`,
-            defaultMessage: 'Configuration',
-          },
-          to: `/settings/${pluginId}`,
-          Component: async () => {
-            const component = await import('./pages/App');
-            return component;
-          },
-        //permissions: [pluginPermissions.settings],
-        },
-      ]
-    );
+
     app.registerPlugin({
       id: pluginId,
-      initializer: Initializer,
-      isReady: false,
-      name,
+      name: pluginId,
     });
   },
 
-  bootstrap(app: any) {},
-  async registerTrads(app: any) {
-    const { locales } = app;
+  bootstrap(app: StrapiApp) {
+    app.addSettingsLink(
+      {
+        id: pluginId,
+        intlLabel: {
+          id: `${pluginId}.settings.title`,
+          defaultMessage: displayName,
+        },
+      },
+      {
+        id: `${pluginId}.config`,
+        intlLabel: {
+          id: `${pluginId}.settings.config`,
+          defaultMessage: "Configuration",
+        },
+        to: pluginId,
+        Component: () => import("./pages/Settings"),
+        permissions: pluginPermissions.settings,
+      },
+    );
+
+  },
+
+  async registerTrads({ locales }: { locales: string[] }) {
     const importedTrads = await Promise.all(
-      (locales as any[]).map((locale) => {
+      locales.map((locale) => {
         return import(`./translations/${locale}.json`)
           .then(({ default: data }) => {
             return {
@@ -75,7 +65,7 @@ export default {
               locale,
             };
           });
-      })
+      }),
     );
 
     return Promise.resolve(importedTrads);
