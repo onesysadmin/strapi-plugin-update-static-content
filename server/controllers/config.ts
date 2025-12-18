@@ -1,8 +1,8 @@
 import type { Core } from '@strapi/strapi';
-import * as jose from 'jose';
 import { pluginId } from '../../admin/src/pluginId';
 import {queryPluginConfig, queryPluginConfigId} from '../utils/queryPluginConfig';
 import {validateConfig} from '../validators/validateConfig';
+import { encrypt } from '../utils/crypto';
 import Config from '../../types/Config';
 
 
@@ -69,25 +69,17 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
 
       const sanitizedBody = await validateConfig(body);
 
-      const secret = strapi.plugin(pluginId).config("JWT_SECRET") as string | undefined | null;
-      if (!secret) {
+      const encryptionKey = strapi.plugin(pluginId).config("ENCRYPTION_KEY") as string | undefined | null;
+      if (!encryptionKey) {
         ctx.status = 500;
         ctx.body = {
-          error: 'JWT_SECRET not found in server config'
+          error: 'ENCRYPTION_KEY not found in server config'
         };
         return;
       }
-      const decodedSecret = jose.base64url.decode(secret);
-      const payload = {
-        githubToken: sanitizedBody.githubToken,
-      }
 
-      const jwt = await new jose.SignJWT(payload)
-      .setProtectedHeader({ alg: 'HS256', "typ": "JWT" })
-      .sign(decodedSecret);
+      sanitizedBody.githubToken = encrypt(sanitizedBody.githubToken, encryptionKey);
 
-      sanitizedBody.githubToken = jwt;
-      
       await strapi.documents(`plugin::${pluginId}.config`).create({
           data: sanitizedBody
       });

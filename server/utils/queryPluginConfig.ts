@@ -1,21 +1,18 @@
 import type { Core } from '@strapi/strapi';
-import * as jose from 'jose';
 import { pluginId } from '../../admin/src/pluginId';
+import { decrypt } from './crypto';
 import Config from '../../types/Config';
 
-async function decryptToken(c : Config) {
+function decryptToken(c: Config): Config {
   const githubToken = c.githubToken;
   if (githubToken) {
-    const secret = strapi.plugin(pluginId).config("JWT_SECRET") as string | undefined | null;
-    if (!secret) {
-      throw new Error('JWT_SECRET not found in server config');
+    const encryptionKey = strapi.plugin(pluginId).config("ENCRYPTION_KEY") as string | undefined | null;
+    if (!encryptionKey) {
+      throw new Error('ENCRYPTION_KEY not found in server config');
     }
-    const decodedSecret = jose.base64url.decode(secret);
-    const { payload: decryptedPayload } = await jose.jwtVerify(githubToken, decodedSecret);
-    const { githubToken: decryptedGithubToken } = decryptedPayload;
-    c.githubToken = decryptedGithubToken as string;
-    return c
+    c.githubToken = decrypt(githubToken, encryptionKey);
   }
+  return c;
 }
 
 export async function queryPluginConfig(strapi: Core.Strapi): Promise<Config[]> {
@@ -29,8 +26,7 @@ export async function queryPluginConfig(strapi: Core.Strapi): Promise<Config[]> 
       return [];
     }
     
-    const processedConfig = await Promise.all(configs.map(decryptToken));
-    return processedConfig;
+    return configs.map(decryptToken);
   }
   catch (err) {
     throw err;
@@ -52,11 +48,7 @@ export async function queryPluginConfigId(strapi: Core.Strapi, id: string): Prom
       throw new Error('Config not found');
     }
     
-    const decryptedConfig = await decryptToken(config);
-    if (!decryptedConfig) {
-      throw new Error('Error decrypting token');
-    }
-    return decryptedConfig;
+    return decryptToken(config);
   }
   catch (err) {
     throw err;
