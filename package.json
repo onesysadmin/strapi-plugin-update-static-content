@@ -58,6 +58,7 @@
     "npm": ">=6.0.0"
   },
   "dependencies": {
+    "@octokit/rest": "^22.0.1",
     "@strapi/design-system": "^2.0.2",
     "@strapi/icons": "^2.0.2",
     "date-fns": "^4.1.0",

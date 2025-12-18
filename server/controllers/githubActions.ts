@@ -16,7 +16,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     }
     ctx.body = response.data;
   },
-  triggerAll : async (ctx) => {
+  triggerAll: async (ctx) => {
     const response = await strapi.plugin(pluginId).service('githubActions').triggerAll();
     ctx.body = response.data;
   },
