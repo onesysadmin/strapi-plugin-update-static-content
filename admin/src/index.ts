@@ -39,14 +39,13 @@ export default {
         id: `${pluginId}.config`,
         intlLabel: {
           id: `${pluginId}.settings.config`,
-          defaultMessage: "Configuration",
+          defaultMessage: 'Configuration',
         },
         to: pluginId,
-        Component: () => import("./pages/Settings"),
+        Component: () => import('./pages/Settings'),
         permissions: pluginPermissions.settings,
       },
     );
-
   },
 
   async registerTrads({ locales }: { locales: string[] }) {

@@ -65,64 +65,66 @@ export default function WorkflowsTable() {
 
   return (
     <Box background="neutral0" shadow="tableShadow" hasRadius width="100%">
-      {isEmpty ? (
-        <EmptyStateLayout icon={<EmptyDocuments width="160px" />} content={EMPTY_STATE_CONTENT} />
-      ) : (
-        <Table colCount={6} rowCount={data.length}>
-          <Thead>
-            <Tr>
-              <Th>
-                <Typography variant="sigma">ID</Typography>
-              </Th>
-              <Th>
-                <Typography variant="sigma">GitHub Account</Typography>
-              </Th>
-              <Th>
-                <Typography variant="sigma">Repository</Typography>
-              </Th>
-              <Th>
-                <Typography variant="sigma">Branch</Typography>
-              </Th>
-              <Th>
-                <Typography variant="sigma">Workflow</Typography>
-              </Th>
-              <Th>
-                <Typography variant="sigma">Actions</Typography>
-              </Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data.map((workflow) => (
-              <Tr key={workflow.id}>
-                <Td>
-                  <Typography textColor="neutral800">{workflow.id}</Typography>
-                </Td>
-                <Td>
-                  <Typography textColor="neutral800">{workflow.githubAccount}</Typography>
-                </Td>
-                <Td>
-                  <Typography textColor="neutral800">{workflow.repo}</Typography>
-                </Td>
-                <Td>
-                  <Typography textColor="neutral800">{workflow.branch}</Typography>
-                </Td>
-                <Td>
-                  <Typography textColor="neutral800">{workflow.workflow}</Typography>
-                </Td>
-                <Td>
-                  <Flex>
-                    <Button
-                      onClick={() => openDeleteDialog(workflow.documentId!)}
-                      variant="ghost"
-                      startIcon={<Trash />}
-                    />
-                  </Flex>
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      )}
+      {isEmpty
+        ? (
+            <EmptyStateLayout icon={<EmptyDocuments width="160px" />} content={EMPTY_STATE_CONTENT} />
+          )
+        : (
+            <Table colCount={6} rowCount={data.length}>
+              <Thead>
+                <Tr>
+                  <Th>
+                    <Typography variant="sigma">ID</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">GitHub Account</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">Repository</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">Branch</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">Workflow</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">Actions</Typography>
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {data.map((workflow) => (
+                  <Tr key={workflow.id}>
+                    <Td>
+                      <Typography textColor="neutral800">{workflow.id}</Typography>
+                    </Td>
+                    <Td>
+                      <Typography textColor="neutral800">{workflow.githubAccount}</Typography>
+                    </Td>
+                    <Td>
+                      <Typography textColor="neutral800">{workflow.repo}</Typography>
+                    </Td>
+                    <Td>
+                      <Typography textColor="neutral800">{workflow.branch}</Typography>
+                    </Td>
+                    <Td>
+                      <Typography textColor="neutral800">{workflow.workflow}</Typography>
+                    </Td>
+                    <Td>
+                      <Flex>
+                        <Button
+                          onClick={() => { if (workflow.documentId) openDeleteDialog(workflow.documentId); }}
+                          variant="ghost"
+                          startIcon={<Trash />}
+                        />
+                      </Flex>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          )}
 
       <ConfirmDialog
         bodyText={{

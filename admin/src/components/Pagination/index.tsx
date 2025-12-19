@@ -26,13 +26,13 @@ export function Pagination({ page, numberOfItems, setPage, maxPerPage }: Paginat
       <Button
         key={item}
         size="L"
-        onClick={() => setPage(item)}
+        onClick={() => { setPage(item); }}
         variant={item === page ? 'tertiary' : 'ghost'}
       >
         {item}
       </Button>
     );
-  })
+  });
 
   return (
     <Flex gap={2} alignItems="center" justifyContent="center">
@@ -47,14 +47,16 @@ export function Pagination({ page, numberOfItems, setPage, maxPerPage }: Paginat
         </Flex>
       </Button>
       {
-        pagesArray.length > 5 ? (
-            <>
+        pagesArray.length > 5
+          ? (
+              <>
                 {pagesArray.slice(0, 2)}
                 <More />
                 {pagesArray.slice(-1)}
-            </>
-            ) : (
-            pagesArray
+              </>
+            )
+          : (
+              pagesArray
             )
       }
       <Button

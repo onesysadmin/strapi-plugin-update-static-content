@@ -128,10 +128,11 @@ async function getLogs(jobId: string, id: string): Promise<string | ErrorRespons
     }
 
     return { status: 500, statusText: 'No redirect location found' };
-  } catch (err: any) {
+  } catch (err: unknown) {
     // 302 redirect with manual mode may throw - check for location header
-    if (err.status === 302 && err.response?.headers?.location) {
-      return err.response.headers.location;
+    const redirectErr = err as { status?: number; response?: { headers?: { location?: string } } };
+    if (redirectErr.status === 302 && redirectErr.response?.headers?.location) {
+      return redirectErr.response.headers.location;
     }
     return handleOctokitError(err);
   }

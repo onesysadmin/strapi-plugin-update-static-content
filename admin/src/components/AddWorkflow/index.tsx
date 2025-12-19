@@ -77,12 +77,12 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
         <Layouts.Header
           title={HEADER_TITLE}
           subtitle={HEADER_SUBTITLE}
-          navigationAction={
+          navigationAction={(
             <Link tag="button" startIcon={<ArrowLeft />} onClick={onCancel}>
               {BACK_BUTTON}
             </Link>
-          }
-          primaryAction={
+          )}
+          primaryAction={(
             <Button
               onClick={handleSubmit}
               loading={isSubmitting}
@@ -92,7 +92,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
             >
               {SAVE_BUTTON}
             </Button>
-          }
+          )}
         />
         <Layouts.Content>
           <Box
@@ -110,12 +110,13 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                 <TextInput
                   type="text"
                   value={githubToken}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setGithubToken(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => { setGithubToken(e.target.value); }}
                   placeholder={PLACEHOLDER_GITHUB_TOKEN}
                   autoComplete="off"
                 />
                 <Field.Hint>
-                  {HINT_GITHUB_TOKEN}{' '}
+                  {HINT_GITHUB_TOKEN}
+                  {' '}
                   <Link
                     href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
                     isExternal
@@ -130,7 +131,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                 <TextInput
                   type="text"
                   value={githubAccount}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setGithubAccount(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => { setGithubAccount(e.target.value); }}
                   placeholder={PLACEHOLDER_OWNER}
                 />
                 <Field.Hint>{HINT_OWNER}</Field.Hint>
@@ -141,7 +142,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                 <TextInput
                   type="text"
                   value={repo}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setRepo(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => { setRepo(e.target.value); }}
                   placeholder={PLACEHOLDER_REPO}
                 />
                 <Field.Hint>{HINT_REPO}</Field.Hint>
@@ -152,7 +153,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                 <TextInput
                   type="text"
                   value={branch}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setBranch(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => { setBranch(e.target.value); }}
                   placeholder={PLACEHOLDER_BRANCH}
                 />
                 <Field.Hint>{HINT_BRANCH}</Field.Hint>
@@ -163,7 +164,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                 <TextInput
                   type="text"
                   value={workflow}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setWorkflow(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => { setWorkflow(e.target.value); }}
                   placeholder={PLACEHOLDER_WORKFLOWID}
                 />
                 <Field.Hint>{HINT_WORKFLOWID}</Field.Hint>

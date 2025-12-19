@@ -34,11 +34,11 @@ const Settings = () => {
         <Layouts.Header
           title={HEADER_TITLE}
           subtitle={HEADER_SUBTITLE}
-          primaryAction={
+          primaryAction={(
             <Button startIcon={<Plus />} onClick={handleAddClick}>
               {ADD_WORKFLOW_BUTTON}
             </Button>
-          }
+          )}
         />
         <Layouts.Content>
           <WorkflowsTable />

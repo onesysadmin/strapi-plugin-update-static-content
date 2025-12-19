@@ -9,13 +9,13 @@ const stickyStyle = {
   zIndex: 10,
 };
 
-type Props = {
+interface Props {
   variant: 'danger' | 'success';
   title: string;
   message: string;
   action?: React.ReactNode;
   closeToastHandler: () => void;
-};
+}
 
 export default function ToastMessage({
   variant,

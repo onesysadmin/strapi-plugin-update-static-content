@@ -1,4 +1,3 @@
-import React from 'react';
 import { Badge } from '@strapi/design-system';
 
 export default function Label(status: 'success' | 'failure') {
