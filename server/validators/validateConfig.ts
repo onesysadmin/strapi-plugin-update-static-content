@@ -7,7 +7,7 @@ const validateConfig = validateYupSchema(
     repo: yup.string().trim().required(),
     workflow: yup.string().trim().required(),
     branch: yup.string().trim().required(),
-  })
+  }),
 );
 
 export { validateConfig };

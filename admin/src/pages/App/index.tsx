@@ -3,7 +3,6 @@ import {
   Flex,
   Menu,
   Link,
-  LinkButton,
   Table,
   Tbody,
   TextButton,
@@ -17,8 +16,8 @@ import {
 } from '@strapi/design-system';
 import { EmptyDocuments } from '@strapi/icons/symbols';
 import { Layouts, Page, useFetchClient } from '@strapi/strapi/admin';
-import { ArrowLeft, Check, More, Plus, ArrowClockwise } from '@strapi/icons';
-import React, { useRef, useState } from 'react';
+import { Check, More, Plus, ArrowClockwise } from '@strapi/icons';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Config from '../../../../types/Config';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
@@ -39,7 +38,7 @@ const THEAD_ITEMS = [
   <VisuallyHidden key="actions" />,
 ];
 
-type Data = {
+interface Data {
   total_count?: number;
   workflow_runs?: {
     id: number;
@@ -52,14 +51,14 @@ type Data = {
     disabled: string;
     created_at: string;
   }[];
-};
+}
 
-type Toast = {
+interface Toast {
   variant: 'danger' | 'success';
   title: string;
   message: string;
   action?: React.ReactNode;
-};
+}
 
 function App() {
   // Hooks
@@ -68,8 +67,8 @@ function App() {
   const [toastMsg, setToastMsg] = useState<Toast>({} as Toast);
   const [toastToggle, setToastToggle] = useState(false);
   const { post } = useFetchClient();
-  const [workflows, isWorkflowsFetching, handleRefetchWorkflows] = useFetch<Config[]>(
-    `/${pluginId}/config`
+  const [workflows, isWorkflowsFetching] = useFetch<Config[]>(
+    `/${pluginId}/config`,
   );
 
   const [page, setPage] = useState(1);
@@ -79,7 +78,7 @@ function App() {
   const hasWorkflows = Array.isArray(workflows) && workflows.length > 0;
 
   const [data, isLoading, handleRefetch] = useFetch<Data>(
-    `/${pluginId}/github-actions-history/${selectedWorkflow || '0'}?page=${page}`
+    `/${pluginId}/github-actions-history/${selectedWorkflow || '0'}?page=${page}`,
   );
 
   const maxPerPage = 20;
@@ -98,19 +97,18 @@ function App() {
   const TOAST_SUCCESS_DESCRIPTION = useFormattedLabel('plugin.toast.success.description');
   const TOAST_FAILURE_UNKNOWN_TITLE = useFormattedLabel('plugin.toast.failure.unknown.title');
   const TOAST_FAILURE_UNKNOWN_DESCRIPTION = useFormattedLabel(
-    'plugin.toast.failure.unknown.description'
+    'plugin.toast.failure.unknown.description',
   );
   const TOAST_FAILURE_UNPROCESSABLE_TITLE = useFormattedLabel(
-    'plugin.toast.failure.unprocessableEntity.title'
+    'plugin.toast.failure.unprocessableEntity.title',
   );
   const TOAST_FAILURE_UNPROCESSABLE_DESCRIPTION = useFormattedLabel(
-    'plugin.toast.failure.unprocessableEntity.description'
+    'plugin.toast.failure.unprocessableEntity.description',
   );
   const TOAST_PERMISSION_DENIED_MSG = useFormattedLabel('permission.toast.message');
   const TOAST_PERMISSION_DENIED_TITLE = useFormattedLabel('permission.toast.title');
   const SEE_MORE_BUTTON = useFormattedLabel('button.seeMore');
   const REFRESH_BUTTON = useFormattedLabel('button.refresh');
-  const BACK_BUTTON = useFormattedLabel('button.back');
   const EMPTY_STATE_CONTENT = useFormattedLabel('plugin.empty.content');
   const EMPTY_STATE_ACTION = useFormattedLabel('plugin.empty.action');
 
@@ -139,9 +137,8 @@ function App() {
     try {
       await post(`/${pluginId}/github-actions-trigger/all`);
       handleRefetch();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      console.error("coucou");
       setToastMsg({
         variant: 'danger',
         title: TOAST_FAILURE_UNKNOWN_TITLE,
@@ -173,9 +170,12 @@ function App() {
         ),
       });
       setToastToggle(true);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      const { status, name } = error.response.data.error;
+
+      const err = error as { response?: { data?: { error?: { status?: number; name?: string } } } };
+      const status = err.response?.data?.error?.status;
+      const name = err.response?.data?.error?.name;
 
       if (status === 422 && name === 'UnprocessableEntityError') {
         setToastMsg({
@@ -241,7 +241,7 @@ function App() {
           isOpen={isConfirmOneDialogOpen}
           onToggleDialog={toggleConfirmOneDialog}
           onConfirm={triggerGithubActions}
-          variantRightButton={'success-light'}
+          variantRightButton="success-light"
           iconRightButton={<Check />}
         />
         <Flex background="buttonPrimary600" hasRadius>
@@ -279,7 +279,7 @@ function App() {
           isOpen={isConfirmAllDialogOpen}
           onToggleDialog={toggleConfirmAllDialog}
           onConfirm={triggerAllGithubActions}
-          variantRightButton={'success-light'}
+          variantRightButton="success-light"
           iconRightButton={<Check />}
         />
       </Flex>
@@ -307,20 +307,20 @@ function App() {
             subtitle={HEADER_SUBTITLE}
           />
           <Layouts.Content>
-            {toastToggle && <ToastMsg {...toastMsg} closeToastHandler={() => setToastToggle(false)} />}
+            {toastToggle && <ToastMsg {...toastMsg} closeToastHandler={() => { setToastToggle(false); }} />}
             <Box background="neutral0" shadow="tableShadow" hasRadius width="100%">
               <EmptyStateLayout
                 icon={<EmptyDocuments width="160px" />}
                 content={EMPTY_STATE_CONTENT}
-                action={
+                action={(
                   <Button
                     variant="secondary"
                     startIcon={<Plus />}
-                    onClick={() => navigate(`/settings/${pluginId}`)}
+                    onClick={() => { navigate(`/settings/${pluginId}`); }}
                   >
                     {EMPTY_STATE_ACTION}
                   </Button>
-                }
+                )}
               />
             </Box>
           </Layouts.Content>
@@ -339,114 +339,116 @@ function App() {
           primaryAction={<Actions />}
         />
         <Layouts.Content>
-          {toastToggle && <ToastMsg {...toastMsg} closeToastHandler={() => setToastToggle(false)} />}
+          {toastToggle && <ToastMsg {...toastMsg} closeToastHandler={() => { setToastToggle(false); }} />}
           <Flex gap={3} alignItems="start" width="100%" overflowX="auto" direction="column">
-              <Flex
-                gap={3}
-                background="neutral0"
-                shadow="tableShadow"
-                hasRadius
-                padding={4}
-                alignItems="start"
-                overflowX="auto"
-              >
-                {workflows.map((workflow, index) => {
-                  if (!selectedWorkflow && workflows[0].documentId) {
-                    setSelectedWorkflow(workflows[0].documentId);
-                  }
-                  return (
-                    <Button
-                      onClick={() => handleSelectWorkflow(workflow.documentId!)}
-                      variant={selectedWorkflow === workflow.documentId ? 'primary' : 'ghost'}
-                      size="L"
-                      loading={isWorkflowsFetching}
-                      width="100%"
-                      key={workflow.documentId ?? index}
-                    >
-                      <p
-                        style={{
-                          width: '100%',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        {workflow.workflow}
-                      </p>
-                    </Button>
-                  );
-                })}
-                <Button
-                  variant="ghost"
-                  size="L"
-                  onClick={() => navigate(`/settings/${pluginId}`)}
-                >
-                  <Plus />
-                </Button>
-              </Flex>
-              <Box background="neutral0" shadow="tableShadow" hasRadius width="100%">
-                {isLoading || !data.workflow_runs ? (
-                  <Flex
+            <Flex
+              gap={3}
+              background="neutral0"
+              shadow="tableShadow"
+              hasRadius
+              padding={4}
+              alignItems="start"
+              overflowX="auto"
+            >
+              {workflows.map((workflow, index) => {
+                if (!selectedWorkflow && workflows[0].documentId) {
+                  setSelectedWorkflow(workflows[0].documentId);
+                }
+                return (
+                  <Button
+                    onClick={() => { if (workflow.documentId) handleSelectWorkflow(workflow.documentId); }}
+                    variant={selectedWorkflow === workflow.documentId ? 'primary' : 'ghost'}
+                    size="L"
+                    loading={isWorkflowsFetching}
                     width="100%"
-                    justifyContent="center"
-                    alignItems="center"
-                    paddingTop="5em"
-                    paddingBottom="5em"
+                    key={workflow.documentId ?? index}
                   >
-                    <PageLoading />
-                  </Flex>
-                ) : (
-                  <>
-                    <Table colCount={6} rowCount={data.workflow_runs.length}>
-                      <Thead>
-                        <Tr>
-                          {THEAD_ITEMS.map((title, i) => (
-                            <Th key={i}>
-                              <Typography variant="sigma">{title}</Typography>
-                            </Th>
-                          ))}
-                        </Tr>
-                      </Thead>
-                      <Tbody>
-                        {data.workflow_runs.map(
-                          ({
-                            id,
-                            conclusion,
-                            name,
-                            run_number,
-                            run_started_at,
-                            html_url,
-                            updated_at,
-                            created_at,
-                          }) => {
-                            return (
-                              <CustomRow
-                                key={id}
-                                id={id}
-                                workflowId={selectedWorkflow || '0'}
-                                conclusion={conclusion}
-                                name={name}
-                                run_number={run_number}
-                                run_started_at={run_started_at}
-                                html_url={html_url}
-                                updated_at={updated_at}
-                                created_at={created_at}
-                              />
-                            );
-                          }
-                        )}
-                      </Tbody>
-                    </Table>
-                    <Flex marginTop={3} paddingBottom={4} direction="column" alignItems="center" width="100%">
-                      <Pagination
-                        page={page}
-                        setPage={handleSetPage}
-                        numberOfItems={numberOfItems}
-                        maxPerPage={maxPerPage}
-                      />
+                    <p
+                      style={{
+                        width: '100%',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {workflow.workflow}
+                    </p>
+                  </Button>
+                );
+              })}
+              <Button
+                variant="ghost"
+                size="L"
+                onClick={() => { navigate(`/settings/${pluginId}`); }}
+              >
+                <Plus />
+              </Button>
+            </Flex>
+            <Box background="neutral0" shadow="tableShadow" hasRadius width="100%">
+              {isLoading || !data.workflow_runs
+                ? (
+                    <Flex
+                      width="100%"
+                      justifyContent="center"
+                      alignItems="center"
+                      paddingTop="5em"
+                      paddingBottom="5em"
+                    >
+                      <PageLoading />
                     </Flex>
-                  </>
-                )}
-              </Box>
+                  )
+                : (
+                    <>
+                      <Table colCount={6} rowCount={data.workflow_runs.length}>
+                        <Thead>
+                          <Tr>
+                            {THEAD_ITEMS.map((title, i) => (
+                              <Th key={i}>
+                                <Typography variant="sigma">{title}</Typography>
+                              </Th>
+                            ))}
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+                          {data.workflow_runs.map(
+                            ({
+                              id,
+                              conclusion,
+                              name,
+                              run_number,
+                              run_started_at,
+                              html_url,
+                              updated_at,
+                              created_at,
+                            }) => {
+                              return (
+                                <CustomRow
+                                  key={id}
+                                  id={id}
+                                  workflowId={selectedWorkflow || '0'}
+                                  conclusion={conclusion}
+                                  name={name}
+                                  run_number={run_number}
+                                  run_started_at={run_started_at}
+                                  html_url={html_url}
+                                  updated_at={updated_at}
+                                  created_at={created_at}
+                                />
+                              );
+                            },
+                          )}
+                        </Tbody>
+                      </Table>
+                      <Flex marginTop={3} paddingBottom={4} direction="column" alignItems="center" width="100%">
+                        <Pagination
+                          page={page}
+                          setPage={handleSetPage}
+                          numberOfItems={numberOfItems}
+                          maxPerPage={maxPerPage}
+                        />
+                      </Flex>
+                    </>
+                  )}
+            </Box>
           </Flex>
         </Layouts.Content>
       </Page.Main>

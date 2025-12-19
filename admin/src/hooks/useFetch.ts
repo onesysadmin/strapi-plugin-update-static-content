@@ -21,15 +21,16 @@ export default function useFetch<TData>(url: string): [TData, boolean, () => voi
       try {
         const response = await get(url, { signal });
         setData(response.data);
-      } catch (err: any) {
-        const response = JSON.parse(JSON.stringify(err)).response;
-        console.error(response);
+      } catch (err: unknown) {
+        console.error(err);
       } finally {
         setIsLoading(false);
       }
     })();
 
-    return () => abortController.abort();
+    return () => {
+      abortController.abort();
+    };
   }, [refetch, url]);
 
   return [data, isLoading, handleRefetch];

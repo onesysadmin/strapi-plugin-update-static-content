@@ -1,6 +1,6 @@
 {
   "name": "@onesysadmin/strapi-plugin-update-static-content",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "An strapi plugin to rebuild and deploy your SSG website via Github Actions.",
   "strapi": {
     "name": "update-static-content",
@@ -30,10 +30,11 @@
   ],
   "scripts": {
     "build": "strapi-plugin build",
-    "build:admin": "tsc -p ./admin/tsconfig.json",
     "watch": "strapi-plugin watch",
     "watch:link": "strapi-plugin watch:link",
-    "verify": "strapi-plugin verify"
+    "verify": "strapi-plugin verify",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
   },
   "homepage": "https://github.com/everythinginjs/strapi-plugin-update-static-content#update-static-content---strapi-v5",
   "bugs": {
@@ -59,36 +60,36 @@
     "npm": ">=6.0.0"
   },
   "dependencies": {
-    "@strapi/design-system": "^2.0.0",
-    "@strapi/icons": "^2.0.0",
-    "date-fns": "^2.30.0",
-    "jose": "^5.6.3",
-    "react-intl": "^6.6.0"
+    "@octokit/rest": "^22.0.1",
+    "@strapi/design-system": "^2.0.2",
+    "@strapi/icons": "^2.0.2",
+    "date-fns": "^4.1.0",
+    "react-intl": "^6.8.9"
   },
   "devDependencies": {
-    "@strapi/sdk-plugin": "^5.3.0",
-    "@strapi/strapi": "^5.32.0",
+    "@eslint/js": "^9.39.2",
+    "@strapi/sdk-plugin": "^5.3.2",
+    "@strapi/strapi": "^5.33.0",
     "@strapi/typescript-utils": "^5.32.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "eslint": "8.57.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-prettier": "5.2.1",
-    "eslint-plugin-react": "7.37.0",
-    "prettier": "3.3.3",
+    "@stylistic/eslint-plugin": "^5.6.1",
+    "@types/react": "^18.3.27",
+    "@types/react-dom": "^18.3.7",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react": "^7.37.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.22.0",
-    "styled-components": "^6.1.8",
-    "typescript": "^5.9.3"
+    "react-router-dom": "^6.30.2",
+    "styled-components": "^6.1.19",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.50.0"
   },
   "peerDependencies": {
-    "@strapi/sdk-plugin": "^5.3.0",
-    "@strapi/strapi": "^5.32.0",
+    "@strapi/sdk-plugin": "^5.3.2",
+    "@strapi/strapi": "^5.33.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.22.0",
-    "styled-components": "^6.1.8"
+    "react-router-dom": "^6.30.2",
+    "styled-components": "^6.1.19"
   },
   "keywords": [
     "strapi",

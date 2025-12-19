@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Flex, Tr, Td, Typography } from '@strapi/design-system';
 import { differenceInMilliseconds, formatRelative } from 'date-fns';
 import { Eye, ExternalLink } from '@strapi/icons';
@@ -6,7 +6,7 @@ import Label from '../Label';
 import { pluginId } from '../../pluginId';
 import { useFetchClient } from '@strapi/strapi/admin';
 
-type Props = {
+interface Props {
   id: number;
   workflowId: string;
   conclusion: 'success' | 'failure';
@@ -16,7 +16,7 @@ type Props = {
   html_url: string;
   updated_at: string;
   created_at: string;
-};
+}
 
 export default function CustomRow({
   id,

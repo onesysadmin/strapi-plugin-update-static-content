@@ -2,7 +2,7 @@ import { Button, Dialog, Flex, Typography } from '@strapi/design-system';
 import { WarningCircle } from '@strapi/icons';
 import { ReactNode } from 'react';
 
-type ConfirmDialogProps = {
+interface ConfirmDialogProps {
   onToggleDialog: () => void;
   onConfirm: () => void;
   isOpen: boolean;
@@ -11,7 +11,7 @@ type ConfirmDialogProps = {
   rightButtonText?: { id: string; defaultMessage: string };
   variantRightButton?: 'default' | 'tertiary' | 'secondary' | 'danger' | 'success' | 'ghost' | 'success-light' | 'danger-light';
   iconRightButton?: ReactNode;
-};
+}
 
 export function ConfirmDialog({
   onToggleDialog,

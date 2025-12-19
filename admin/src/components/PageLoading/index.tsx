@@ -1,4 +1,3 @@
-import React from 'react';
 import { Flex, Loader } from '@strapi/design-system';
 import useFormattedLabel from '../../hooks/useFormattedLabel';
 

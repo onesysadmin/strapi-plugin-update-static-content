@@ -2,9 +2,7 @@
 
 <p align="center">Update your statically generated site with github actions (more coming on the way).</p>
 
-> **⚠️ Version 4.0.0 and above** - This version is compatible with **Strapi v5** only. For Strapi v4, please use version 3.x.
->
-> See [MIGRATION_V4_TO_V5.md](./MIGRATION_V4_TO_V5.md) for upgrade instructions.
+> **⚠️ Version 5.0.0 and above** - This version is compatible with **Strapi v5** only. For Strapi v4, please use version 3.x.
 
 ---
 
