@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.0.7]
+
+### Fixed
+- Fixed npm package checksum mismatch issue when installing version 5.0.6
+- Improved .npmignore configuration to ensure consistent package publishing
+
 ## [5.0.4]
 
 ### Added
