@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.1.0] - 2026-01-04
+
+### Changed
+- Replaced button-based workflow selector with a dropdown (SingleSelect) component for better UX and scalability
+- Added "Select Workflow" label and placeholder to workflow selector
+- Workflow selection now uses a compact dropdown menu instead of horizontal buttons
+
 ## [5.0.8] - 2026-01-04
 
 ### Fixed
