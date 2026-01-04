@@ -366,13 +366,6 @@ function App() {
                   </Button>
                 );
               })}
-              <Button
-                variant="ghost"
-                size="L"
-                onClick={() => { navigate(`/settings/${pluginId}`); }}
-              >
-                <Plus />
-              </Button>
             </Flex>
             <Box background="neutral0" shadow="tableShadow" hasRadius width="100%">
               {isLoading || !data.workflow_runs
