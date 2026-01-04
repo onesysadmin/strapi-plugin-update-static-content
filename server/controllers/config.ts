@@ -19,9 +19,10 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
           branch: c.branch,
         };
       });
-    } catch (err) {
-      ctx.body = err;
+    } catch (error) {
+      strapi.log.error('Failed to fetch plugin configs:', error);
       ctx.status = 500;
+      ctx.body = [];
     }
   },
 
@@ -37,9 +38,12 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         workflow: pluginConfig.workflow,
         branch: pluginConfig.branch,
       };
-    } catch (err) {
-      ctx.body = err;
+    } catch (error) {
+      strapi.log.error(`Failed to fetch plugin config with id ${ctx.params.id}:`, error);
       ctx.status = 500;
+      ctx.body = {
+        error: 'Failed to fetch config',
+      };
     }
   },
 
@@ -53,9 +57,12 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         success: true,
         message: 'Config deleted successfully',
       };
-    } catch (err) {
+    } catch (error) {
+      strapi.log.error(`Failed to delete plugin config with id ${ctx.params.id}:`, error);
       ctx.status = 500;
-      ctx.body = err;
+      ctx.body = {
+        error: 'Failed to delete config',
+      };
     }
   },
 
@@ -83,8 +90,12 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         success: true,
         message: 'Config updated successfully',
       };
-    } catch (err) {
-      ctx.body = err;
+    } catch (error) {
+      strapi.log.error('Failed to update plugin config:', error);
+      ctx.status = 500;
+      ctx.body = {
+        error: 'Failed to update config',
+      };
     }
   },
 });
