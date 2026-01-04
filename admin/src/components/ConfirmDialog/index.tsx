@@ -42,7 +42,7 @@ export function ConfirmDialog({
         </Dialog.Body>
         <Dialog.Footer>
           <Dialog.Cancel>
-            <Button variant="tertiary" onClick={onToggleDialog}>
+            <Button variant="tertiary">
               Cancel
             </Button>
           </Dialog.Cancel>

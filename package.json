@@ -1,6 +1,6 @@
 {
   "name": "@onesysadmin/strapi-plugin-update-static-content",
-  "version": "5.0.7",
+  "version": "5.0.8",
   "description": "An strapi plugin to rebuild and deploy your SSG website via Github Actions.",
   "strapi": {
     "name": "update-static-content",

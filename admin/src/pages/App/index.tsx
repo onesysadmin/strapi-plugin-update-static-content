@@ -16,7 +16,7 @@ import {
 import { EmptyDocuments } from '@strapi/icons/symbols';
 import { Layouts, Page, useFetchClient } from '@strapi/strapi/admin';
 import { Check, Plus, ArrowClockwise } from '@strapi/icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Config from '../../../../types/Config';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
@@ -76,8 +76,16 @@ function App() {
 
   const hasWorkflows = Array.isArray(workflows) && workflows.length > 0;
 
+  // Set initial selected workflow when workflows are loaded
+  useEffect(() => {
+    if (hasWorkflows && !selectedWorkflow && workflows[0].documentId) {
+      setSelectedWorkflow(workflows[0].documentId);
+    }
+  }, [workflows, hasWorkflows, selectedWorkflow]);
+
   const [data, isLoading, handleRefetch] = useFetch<Data>(
     `/${pluginId}/github-actions-history/${selectedWorkflow || '0'}?page=${page}`,
+    !selectedWorkflow, // Skip fetching if no workflow is selected
   );
 
   const maxPerPage = 20;
@@ -342,9 +350,6 @@ function App() {
               overflowX="auto"
             >
               {workflows.map((workflow, index) => {
-                if (!selectedWorkflow && workflows[0].documentId) {
-                  setSelectedWorkflow(workflows[0].documentId);
-                }
                 return (
                   <Button
                     onClick={() => { if (workflow.documentId) handleSelectWorkflow(workflow.documentId); }}
