@@ -1,1 +1,39 @@
-.github
+# Development files and directories
+.github/
+node_modules/
+
+# Source files (only dist/ should be published)
+admin/
+server/
+public/
+types/
+
+# Configuration files
+.gitignore
+.eslintrc*
+eslint.config.mjs
+tsconfig*.json
+
+# Lock files
+package-lock.json
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test files
+*.test.*
+*.spec.*
+__tests__/
+test/
+tests/
+
+# Other
+.DS_Store
+*.log
