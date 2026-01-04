@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [5.0.4] - 2024
+## [5.0.4]
 
 ### Added
 - Support for multiple workflow configurations

@@ -38,11 +38,23 @@ Plugin Page
 
 ## Installation
 
+This package is hosted on GitHub Packages. Configure npm to use GitHub Packages for the `@onesysadmin` scope:
+
+Create or update your `.npmrc` file in your project root:
+
+```
+@onesysadmin:registry=https://npm.pkg.github.com
+```
+
+Then install the plugin:
+
 ```bash
 yarn add @onesysadmin/strapi-plugin-update-static-content
 # OR
 npm i @onesysadmin/strapi-plugin-update-static-content
 ```
+
+> **Note:** The package registry is publicly accessible and does not require authentication.
 
 ## Plugin Configuration
 
