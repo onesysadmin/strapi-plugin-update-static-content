@@ -38,6 +38,21 @@ Plugin Page
 
 ## Installation
 
+This package is published to GitHub Packages. Before installing, you need to configure npm to use GitHub Packages for the `@onesysadmin` scope.
+
+### Configure npm/yarn for GitHub Packages
+
+Create or update your `.npmrc` file in your project root:
+
+```
+@onesysadmin:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
+```
+
+Replace `YOUR_GITHUB_TOKEN` with a GitHub Personal Access Token that has the `read:packages` scope.
+
+### Install the Plugin
+
 ```bash
 yarn add @onesysadmin/strapi-plugin-update-static-content
 # OR
