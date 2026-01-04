@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.0.8] - 2026-01-04
+
+### Fixed
+- Fixed AbortError console error when loading the workflow listing screen
+- Fixed Cancel button not closing confirmation dialogs
+- Improved workflow initialization to prevent race conditions
+
 ## [5.0.7]
 
 ### Fixed
