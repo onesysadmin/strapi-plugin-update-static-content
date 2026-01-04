@@ -1,14 +1,10 @@
-import { useState } from 'react';
-import { Button, Flex, Tr, Td, Typography } from '@strapi/design-system';
+import { Button, Tr, Td, Typography } from '@strapi/design-system';
 import { differenceInMilliseconds, formatRelative } from 'date-fns';
-import { Eye, ExternalLink } from '@strapi/icons';
+import { ExternalLink } from '@strapi/icons';
 import Label from '../Label';
-import { pluginId } from '../../pluginId';
-import { useFetchClient } from '@strapi/strapi/admin';
 
 interface Props {
   id: number;
-  workflowId: string;
   conclusion: 'success' | 'failure';
   name: string;
   run_number: number;
@@ -20,7 +16,6 @@ interface Props {
 
 export default function CustomRow({
   id,
-  workflowId,
   conclusion,
   name,
   run_number,
@@ -29,34 +24,11 @@ export default function CustomRow({
   updated_at,
   created_at,
 }: Props) {
-  const { get } = useFetchClient();
   const isThereAConclusion = Boolean(conclusion);
-  const [disabledLogsButton, setDisabledLogsButton] = useState(isThereAConclusion ? false : true);
   const msDiffResult = differenceInMilliseconds(new Date(updated_at), new Date(run_started_at));
   const mins = Math.floor(msDiffResult / 1000 / 60);
   const secs = (msDiffResult / 1000) % 60;
   const creationDate = formatRelative(new Date(created_at), new Date());
-
-  async function logsHandler(jobId: number) {
-    setDisabledLogsButton(true);
-    try {
-      const response = await get(`/${pluginId}/github-actions-jobs-log/${workflowId}`, {
-        params: {
-          jobId,
-        },
-      });
-      const logsUrl = response.data?.url;
-      if (typeof logsUrl === 'string' && logsUrl.startsWith('http')) {
-        window.open(logsUrl, '_blank');
-      } else {
-        console.error('Invalid logs URL received:', response.data);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setDisabledLogsButton(false);
-    }
-  }
 
   return (
     <Tr key={id}>
@@ -76,22 +48,14 @@ export default function CustomRow({
         </Typography>
       </Td>
       <Td>
-        <Flex gap={1}>
-          <Button
-            variant="ghost"
-            disabled={disabledLogsButton}
-            onClick={() => logsHandler(id)}
-            startIcon={<Eye />}
-          />
-          <Button
-            variant="ghost"
-            tag="a"
-            href={html_url}
-            target="_blank"
-            rel="noreferrer"
-            startIcon={<ExternalLink />}
-          />
-        </Flex>
+        <Button
+          variant="ghost"
+          tag="a"
+          href={html_url}
+          target="_blank"
+          rel="noreferrer"
+          startIcon={<ExternalLink />}
+        />
       </Td>
     </Tr>
   );

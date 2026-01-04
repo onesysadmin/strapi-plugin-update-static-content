@@ -25,6 +25,7 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   const handleConfirm = () => {
     onConfirm();
+    onToggleDialog();
   };
 
   return (

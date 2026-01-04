@@ -1,7 +1,6 @@
 import {
   Button,
   Flex,
-  Menu,
   Link,
   Table,
   Tbody,
@@ -16,7 +15,7 @@ import {
 } from '@strapi/design-system';
 import { EmptyDocuments } from '@strapi/icons/symbols';
 import { Layouts, Page, useFetchClient } from '@strapi/strapi/admin';
-import { Check, More, Plus, ArrowClockwise } from '@strapi/icons';
+import { Check, Plus, ArrowClockwise } from '@strapi/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Config from '../../../../types/Config';
@@ -244,29 +243,21 @@ function App() {
           variantRightButton="success-light"
           iconRightButton={<Check />}
         />
-        <Flex background="buttonPrimary600" hasRadius>
-          <Button
-            onClick={toggleConfirmOneDialog}
-            variant="default"
-            loading={loadingTriggerButton}
-            startIcon={<Plus />}
-          >
-            {PRIMARY_ACTION_BUTTON}
-          </Button>
-          <Flex height="15px" width="1px" background="primary500"></Flex>
-          <Menu.Root>
-            <Menu.Trigger style={{ background: 'inherit', borderRadius: 'inherit' }}>
-              <Button variant="default" style={{ minWidth: 'unset', padding: '8px 12px' }}>
-                <More />
-              </Button>
-            </Menu.Trigger>
-            <Menu.Content>
-              <Menu.Item onSelect={toggleConfirmAllDialog}>
-                {TRIGGER_ALL_WORKFLOWS_BUTTON}
-              </Menu.Item>
-            </Menu.Content>
-          </Menu.Root>
-        </Flex>
+        <Button
+          onClick={toggleConfirmOneDialog}
+          variant="default"
+          loading={loadingTriggerButton}
+          startIcon={<Plus />}
+        >
+          {PRIMARY_ACTION_BUTTON}
+        </Button>
+        <Button
+          onClick={toggleConfirmAllDialog}
+          variant="secondary"
+          startIcon={<Plus />}
+        >
+          {TRIGGER_ALL_WORKFLOWS_BUTTON}
+        </Button>
         <ConfirmDialog
           bodyText={{
             id: 'confirm.message',
@@ -375,13 +366,6 @@ function App() {
                   </Button>
                 );
               })}
-              <Button
-                variant="ghost"
-                size="L"
-                onClick={() => { navigate(`/settings/${pluginId}`); }}
-              >
-                <Plus />
-              </Button>
             </Flex>
             <Box background="neutral0" shadow="tableShadow" hasRadius width="100%">
               {isLoading || !data.workflow_runs
@@ -424,7 +408,6 @@ function App() {
                                 <CustomRow
                                   key={id}
                                   id={id}
-                                  workflowId={selectedWorkflow || '0'}
                                   conclusion={conclusion}
                                   name={name}
                                   run_number={run_number}
