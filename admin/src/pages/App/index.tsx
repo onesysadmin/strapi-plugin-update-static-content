@@ -359,11 +359,11 @@ function App() {
                 >
                   {workflows
                     .filter((workflow): workflow is Config & { documentId: string } =>
-                      typeof workflow.documentId === 'string' && workflow.documentId.length > 0,
+                      Boolean(workflow.documentId),
                     )
-                    .map((workflow, index) => (
+                    .map((workflow) => (
                       <SingleSelectOption
-                        key={workflow.documentId ?? index}
+                        key={workflow.documentId}
                         value={workflow.documentId}
                       >
                         {workflow.workflow}
