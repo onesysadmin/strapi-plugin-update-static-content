@@ -71,6 +71,9 @@
   "button.back": "Back",
   "button.save": "Save",
   "button.details": "Details",
-  "confirm.message": "Do you confirm to trigger this action ?"
+  "confirm.message": "Do you confirm to trigger this action ?",
+  
+  "plugin.workflowSelector.label": "Select Workflow",
+  "plugin.workflowSelector.placeholder": "Choose a workflow"
 
 }
