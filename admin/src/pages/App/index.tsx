@@ -352,19 +352,23 @@ function App() {
                   placeholder={WORKFLOW_SELECTOR_PLACEHOLDER}
                   value={selectedWorkflow || ''}
                   onChange={(value: string | number) => {
-                    if (typeof value === 'string') {
+                    if (typeof value === 'string' && value) {
                       handleSelectWorkflow(value);
                     }
                   }}
                 >
-                  {workflows.map((workflow, index) => (
-                    <SingleSelectOption
-                      key={workflow.documentId ?? index}
-                      value={workflow.documentId || ''}
-                    >
-                      {workflow.workflow}
-                    </SingleSelectOption>
-                  ))}
+                  {workflows
+                    .filter((workflow): workflow is Config & { documentId: string } =>
+                      typeof workflow.documentId === 'string' && workflow.documentId.length > 0,
+                    )
+                    .map((workflow, index) => (
+                      <SingleSelectOption
+                        key={workflow.documentId ?? index}
+                        value={workflow.documentId}
+                      >
+                        {workflow.workflow}
+                      </SingleSelectOption>
+                    ))}
                 </SingleSelect>
               </Field.Root>
             </Box>
