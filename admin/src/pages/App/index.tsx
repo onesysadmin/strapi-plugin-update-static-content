@@ -1,7 +1,6 @@
 import {
   Button,
   Flex,
-  Menu,
   Link,
   Table,
   Tbody,
@@ -16,7 +15,7 @@ import {
 } from '@strapi/design-system';
 import { EmptyDocuments } from '@strapi/icons/symbols';
 import { Layouts, Page, useFetchClient } from '@strapi/strapi/admin';
-import { Check, Plus, ArrowClockwise, CaretDown } from '@strapi/icons';
+import { Check, Plus, ArrowClockwise } from '@strapi/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Config from '../../../../types/Config';
@@ -252,18 +251,13 @@ function App() {
         >
           {PRIMARY_ACTION_BUTTON}
         </Button>
-        <Menu.Root>
-          <Menu.Trigger>
-            <Button variant="secondary" endIcon={<CaretDown />}>
-              {TRIGGER_ALL_WORKFLOWS_BUTTON}
-            </Button>
-          </Menu.Trigger>
-          <Menu.Content>
-            <Menu.Item onSelect={toggleConfirmAllDialog}>
-              {TRIGGER_ALL_WORKFLOWS_BUTTON}
-            </Menu.Item>
-          </Menu.Content>
-        </Menu.Root>
+        <Button
+          onClick={toggleConfirmAllDialog}
+          variant="secondary"
+          startIcon={<Plus />}
+        >
+          {TRIGGER_ALL_WORKFLOWS_BUTTON}
+        </Button>
         <ConfirmDialog
           bodyText={{
             id: 'confirm.message',
