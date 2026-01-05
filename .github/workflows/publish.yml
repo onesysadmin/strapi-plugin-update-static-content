@@ -39,7 +39,9 @@ jobs:
 
       - id: package-version
         name: Get package version
-        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+          echo "name=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT
 
       - id: version-check
         name: Check if version exists in registry
@@ -47,7 +49,7 @@ jobs:
         run: |
           # Try to get package info for this version from GitHub Packages
           # If the version exists, npm view will succeed; if not, it will fail
-          if npm view @${{ github.repository_owner }}/strapi-plugin-update-static-content@${{ steps.package-version.outputs.version }} version 2>/dev/null; then
+          if npm view ${{ steps.package-version.outputs.name }}@${{ steps.package-version.outputs.version }} version 2>/dev/null; then
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "Version ${{ steps.package-version.outputs.version }} already exists in registry"
           else
