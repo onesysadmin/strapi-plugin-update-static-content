@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.2.2] - 2026-01-05
+
+### Fixed
+- Fixed token preservation bug when editing workflows with blank GitHub token field - now properly preserves the existing encrypted token in the database instead of storing the decrypted value
+
 ## [5.2.1] - 2026-01-05
 
 ### Fixed
