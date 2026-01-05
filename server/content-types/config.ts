@@ -22,7 +22,7 @@ export default {
   attributes: {
     description: {
       type: 'string',
-      required: true,
+      required: false,
     },
     githubToken: {
       type: 'string',
