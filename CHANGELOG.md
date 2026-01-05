@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.1.1] - 2026-01-05
+
+### Changed
+- Enhanced workflow dropdown display format to show full context: `<github account>:<repo>/<branch>/<workflow>`
+- Improved workflow identification when multiple workflows share the same name
+
 ## [5.1.0] - 2026-01-04
 
 ### Changed

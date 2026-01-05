@@ -366,7 +366,7 @@ function App() {
                         key={workflow.documentId}
                         value={workflow.documentId}
                       >
-                        {workflow.workflow}
+                        {`${workflow.githubAccount}:${workflow.repo}/${workflow.branch}/${workflow.workflow}`}
                       </SingleSelectOption>
                     ))}
                 </SingleSelect>
