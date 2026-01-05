@@ -121,19 +121,13 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       const existingConfig = await queryPluginConfigId(strapi, id);
 
       // Build update data
-      const updateData: {
-        description: string;
-        githubAccount: string;
-        repo: string;
-        workflow: string;
-        branch: string;
-        githubToken?: string;
-      } = {
+      const updateData = {
         description: sanitizedBody.description,
         githubAccount: sanitizedBody.githubAccount,
         repo: sanitizedBody.repo,
         workflow: sanitizedBody.workflow,
         branch: sanitizedBody.branch,
+        githubToken: '',
       };
 
       // Only update token if a new one was provided
@@ -146,7 +140,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
 
       await strapi.documents(`plugin::${pluginId}.config`).update({
         documentId: id,
-        data: updateData,
+        data: updateData as never,
       });
 
       ctx.body = {
