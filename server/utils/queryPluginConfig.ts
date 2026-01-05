@@ -6,7 +6,14 @@ import Config from '../../types/Config';
 function decryptToken(c: Config, encryptionKey: string): Config {
   const githubToken = c.githubToken;
   if (githubToken) {
-    c.githubToken = decrypt(githubToken, encryptionKey);
+    try {
+      c.githubToken = decrypt(githubToken, encryptionKey);
+    } catch (error) {
+      // If decryption fails, set token to empty string so the config can still be listed
+      // The error will surface when trying to use the token (e.g., triggering workflows)
+      console.error(`Failed to decrypt token for config ${c.id}:`, error);
+      c.githubToken = '';
+    }
   }
   return c;
 }

@@ -1,8 +1,8 @@
 import { useFetchClient } from '@strapi/strapi/admin';
 import { useEffect, useState } from 'react';
 
-export default function useFetch<TData>(url: string, skip = false): [TData, boolean, () => void] {
-  const [data, setData] = useState<TData>({} as TData);
+export default function useFetch<TData>(url: string, skip = false, initialData?: TData): [TData, boolean, () => void] {
+  const [data, setData] = useState<TData>(initialData ?? {} as TData);
   const [isLoading, setIsLoading] = useState(true);
   const [refetch, setRefetch] = useState({});
   const { get } = useFetchClient();
@@ -28,6 +28,7 @@ export default function useFetch<TData>(url: string, skip = false): [TData, bool
         setData(response.data);
       } catch (err: unknown) {
         console.error(err);
+        // Keep the initial data state on error to prevent type mismatches
       } finally {
         setIsLoading(false);
       }
