@@ -9,10 +9,10 @@ function decryptToken(c: Config, encryptionKey: string): Config {
     try {
       c.githubToken = decrypt(githubToken, encryptionKey);
     } catch (error) {
-      // If decryption fails, it might be due to corrupted data or wrong encryption key
-      // Log the error and fail with a descriptive message
+      // If decryption fails, set token to empty string so the config can still be listed
+      // The error will surface when trying to use the token (e.g., triggering workflows)
       console.error(`Failed to decrypt token for config ${c.id}:`, error);
-      throw new Error(`Failed to decrypt token for config ${c.id}. The data may be corrupted or encrypted with a different key.`);
+      c.githubToken = '';
     }
   }
   return c;
