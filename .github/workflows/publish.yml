@@ -2,6 +2,12 @@ name: Build and Publish to GitHub Packages
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build-and-publish:
@@ -31,8 +37,36 @@ jobs:
         name: Build package
         run: npm run build
 
+      - id: package-version
+        name: Get package version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - id: version-check
+        name: Check if version exists in registry
+        continue-on-error: true
+        run: |
+          # Try to get package info for this version from GitHub Packages
+          # If the version exists, npm view will succeed; if not, it will fail
+          if npm view @${{ github.repository_owner }}/strapi-plugin-update-static-content@${{ steps.package-version.outputs.version }} version 2>/dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Version ${{ steps.package-version.outputs.version }} already exists in registry"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Version ${{ steps.package-version.outputs.version }} does not exist in registry"
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - id: publish
         name: Publish to GitHub Packages
+        if: steps.version-check.outputs.exists != 'true' && github.event_name != 'pull_request'
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: skip-publish
+        name: Skip publish - version already exists
+        if: steps.version-check.outputs.exists == 'true'
+        run: |
+          echo "Skipping publish: version ${{ steps.package-version.outputs.version }} already exists in GitHub Packages"
+          echo "Build completed successfully but package was not published"
