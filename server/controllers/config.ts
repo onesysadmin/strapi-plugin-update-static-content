@@ -117,26 +117,27 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         return;
       }
 
-      // Fetch existing config to preserve the token if not provided
-      const existingConfig = await queryPluginConfigId(strapi, id);
-
-      // Build update data
-      const updateData = {
+      // Build update data (excluding githubToken initially)
+      const updateData: {
+        description: string;
+        githubAccount: string;
+        repo: string;
+        workflow: string;
+        branch: string;
+        githubToken?: string;
+      } = {
         description: sanitizedBody.description,
         githubAccount: sanitizedBody.githubAccount,
         repo: sanitizedBody.repo,
         workflow: sanitizedBody.workflow,
         branch: sanitizedBody.branch,
-        githubToken: '',
       };
 
       // Only update token if a new one was provided
       if (sanitizedBody.githubToken && sanitizedBody.githubToken.trim() !== '') {
         updateData.githubToken = encrypt(sanitizedBody.githubToken, encryptionKey);
-      } else {
-        // Keep existing token
-        updateData.githubToken = existingConfig.githubToken;
       }
+      // If no token provided, don't include githubToken in update to preserve existing encrypted token
 
       await strapi.documents(`plugin::${pluginId}.config`).update({
         documentId: id,
