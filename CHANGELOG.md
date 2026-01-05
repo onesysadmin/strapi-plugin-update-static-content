@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.2.3] - 2026-01-05
+
+### Fixed
+- Fixed confirmation dialog reopening after triggering workflow - Dialog.Action now properly handles dialog closure without duplicate toggle calls
+
 ## [5.2.2] - 2026-01-05
 
 ### Fixed
