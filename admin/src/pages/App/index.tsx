@@ -12,6 +12,9 @@ import {
   VisuallyHidden,
   Box,
   EmptyStateLayout,
+  SingleSelect,
+  SingleSelectOption,
+  Field,
 } from '@strapi/design-system';
 import { EmptyDocuments } from '@strapi/icons/symbols';
 import { Layouts, Page, useFetchClient } from '@strapi/strapi/admin';
@@ -118,6 +121,8 @@ function App() {
   const REFRESH_BUTTON = useFormattedLabel('button.refresh');
   const EMPTY_STATE_CONTENT = useFormattedLabel('plugin.empty.content');
   const EMPTY_STATE_ACTION = useFormattedLabel('plugin.empty.action');
+  const WORKFLOW_SELECTOR_LABEL = useFormattedLabel('plugin.workflowSelector.label');
+  const WORKFLOW_SELECTOR_PLACEHOLDER = useFormattedLabel('plugin.workflowSelector.placeholder');
 
   const [isConfirmOneDialogOpen, setIsConfirmOneDialogOpen] = useState<boolean>(false);
   const [isConfirmAllDialogOpen, setIsConfirmAllDialogOpen] = useState<boolean>(false);
@@ -340,38 +345,33 @@ function App() {
         <Layouts.Content>
           {toastToggle && <ToastMsg {...toastMsg} closeToastHandler={() => { setToastToggle(false); }} />}
           <Flex gap={3} alignItems="start" width="100%" overflowX="auto" direction="column">
-            <Flex
-              gap={3}
-              background="neutral0"
-              shadow="tableShadow"
-              hasRadius
-              padding={4}
-              alignItems="start"
-              overflowX="auto"
-            >
-              {workflows.map((workflow, index) => {
-                return (
-                  <Button
-                    onClick={() => { if (workflow.documentId) handleSelectWorkflow(workflow.documentId); }}
-                    variant={selectedWorkflow === workflow.documentId ? 'primary' : 'ghost'}
-                    size="L"
-                    loading={isWorkflowsFetching}
-                    width="100%"
-                    key={workflow.documentId ?? index}
-                  >
-                    <p
-                      style={{
-                        width: '100%',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {workflow.workflow}
-                    </p>
-                  </Button>
-                );
-              })}
-            </Flex>
+            <Box background="neutral0" shadow="tableShadow" hasRadius padding={4} width="100%">
+              <Field.Root name="workflow-selector" width="300px">
+                <Field.Label>{WORKFLOW_SELECTOR_LABEL}</Field.Label>
+                <SingleSelect
+                  placeholder={WORKFLOW_SELECTOR_PLACEHOLDER}
+                  value={selectedWorkflow || ''}
+                  onChange={(value: string | number) => {
+                    if (typeof value === 'string' && value) {
+                      handleSelectWorkflow(value);
+                    }
+                  }}
+                >
+                  {workflows
+                    .filter((workflow): workflow is Config & { documentId: string } =>
+                      Boolean(workflow.documentId),
+                    )
+                    .map((workflow) => (
+                      <SingleSelectOption
+                        key={workflow.documentId}
+                        value={workflow.documentId}
+                      >
+                        {workflow.workflow}
+                      </SingleSelectOption>
+                    ))}
+                </SingleSelect>
+              </Field.Root>
+            </Box>
             <Box background="neutral0" shadow="tableShadow" hasRadius width="100%">
               {isLoading || !data.workflow_runs
                 ? (
