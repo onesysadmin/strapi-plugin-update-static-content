@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.2.0] - 2026-01-05
+
+### Added
+- Added workflow description field to help identify workflows with friendly names
+- Added edit workflow functionality with pencil icon button in settings table
+- Added description column to the workflows table in settings
+- Added support for editing all workflow fields without exposing GitHub tokens
+- Added fallback display logic in workflow selector (shows description or falls back to account:repo/branch/workflow)
+
+### Changed
+- Description field now appears first when adding/editing workflows
+- GitHub token field is optional when editing (empty value preserves existing token)
+- Enhanced workflow selector to prioritize description for better user experience
+
+### Security
+- GitHub tokens remain encrypted and are never exposed in edit forms
+- Token preservation logic ensures existing encrypted tokens are maintained when not updated
+
 ## [5.1.1] - 2026-01-05
 
 ### Changed

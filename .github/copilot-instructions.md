@@ -189,6 +189,13 @@ When making changes, **always**:
 
 ## Common Tasks
 
+### Before Making Any Changes
+
+**IMPORTANT**: For all updates, always remember to:
+1. **Update documentation** - Update CHANGELOG.md, README.md, and any other relevant documentation
+2. **Bump version** - Assess the change type and bump the version appropriately (MAJOR, MINOR, or PATCH)
+3. **Update both package.json and package-lock.json** - Ensure version numbers match
+
 ### Adding a New Component
 
 1. Create component in `admin/src/components/ComponentName/`
@@ -210,8 +217,8 @@ When making changes, **always**:
 1. Identify the root cause
 2. Write a minimal fix
 3. Test the fix thoroughly
-4. Update CHANGELOG.md
-5. Bump PATCH version
+4. **Update CHANGELOG.md** - Add entry under new PATCH version
+5. **Bump PATCH version** - Update package.json and package-lock.json
 6. Commit with descriptive message
 
 ### Adding Features
@@ -220,9 +227,9 @@ When making changes, **always**:
 2. Implement backend (if needed)
 3. Implement frontend
 4. Add translations
-5. Update documentation
-6. Update CHANGELOG.md
-7. Bump MINOR version
+5. **Update documentation** - Update README.md with new feature details
+6. **Update CHANGELOG.md** - Add entry under new MINOR version
+7. **Bump MINOR version** - Update package.json and package-lock.json
 
 ## Testing Guidelines
 
