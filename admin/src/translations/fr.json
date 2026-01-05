@@ -1,1 +1,82 @@
-{}
+{
+  "plugin.name": "Mettre à jour le contenu statique",
+  "settings.title": "Mettre à jour le contenu statique",
+  "permission.guard": "Vous n'avez pas la permission d'accéder à la page.",
+  "permission.toast.title": "Accès refusé",
+  "permission.toast.message": "Vous N'AVEZ PAS la permission d'effectuer cette action.",
+  "settings.pagetitle": "Configuration de mise à jour du contenu statique",
+  "settings.headers.title": "Configuration",
+  "settings.headers.subtitle": "Ici vous pouvez voir votre configuration de mise à jour du contenu statique",
+  "loadingMsg": "Chargement....",
+
+  "settings.fields.description": "Description du workflow",
+  "settings.fields.githubtoken": "Jeton d'accès personnel Github",
+  "settings.fields.owner": "Compte propriétaire Github",
+  "settings.fields.repo": "Dépôt Github",
+  "settings.fields.workflowid": "ID du workflow OU Nom du fichier",
+  "settings.fields.branch": "Branche",
+  "settings.fields.roles": "Rôles",
+
+  "settings.fields.hint.description": "Entrez un nom descriptif pour ce workflow pour l'identifier facilement",
+  "settings.fields.hint.githubtoken": "Entrez votre `Jeton d'accès personnel Github` si vous n'en avez pas, créez-en un ici",
+  "settings.fields.hint.githubtoken.edit": "Laissez vide pour conserver le jeton existant, ou entrez un nouveau jeton pour le mettre à jour",
+  "settings.fields.hint.owner": "Entrez votre `Nom d'utilisateur Github (propriétaire du compte)`",
+  "settings.fields.hint.repo": "Entrez votre `Dépôt Github`",
+  "settings.fields.hint.workflowid": "Entrez votre `workflowId` ou `nom de fichier`",
+  "settings.fields.hint.branch": "Entrez la `branche` souhaitée",
+  "settings.fields.hint.roles": "Rôles ayant accès au plugin",
+
+  "settings.fields.placeholder.description": "par ex., Déploiement Production, Build Staging, etc.",
+  "settings.fields.placeholder.githubtoken": "github_pat_*******",
+  "settings.fields.placeholder.githubtoken.edit": "Laisser vide pour conserver le jeton actuel",
+  "settings.fields.placeholder.owner": "evrythinginjs",
+  "settings.fields.placeholder.repo": "my-static-website",
+  "settings.fields.placeholder.branch": "main",
+  "settings.fields.placeholder.workflowid": "deploy.yaml",
+
+  "plugin.title": "Page de mise à jour du contenu statique",
+  "plugin.headers.title": "Mettre à jour le contenu statique",
+  "plugin.headers.subtitle": "Reconstruire et déployer votre site manuellement",
+
+  "settings.table.footer.label": "Ajouter un autre workflow",
+  "settings.buttons.addWorkflow": "Ajouter un workflow",
+
+  "plugin.buttons.secondary": "Visiter",
+  "plugin.buttons.primary": "Déclencher",
+  "plugin.buttons.triggerAllWorkflows": "Déclencher tous les workflows",
+  "plugin.missingConfig.message": "Veuillez configurer le plugin → ",
+  "plugin.missingConfig.button": "Paramètres du plugin",
+
+  "plugin.toast.success.title": "Déclenché avec succès",
+  "plugin.toast.success.description": "Votre événement workflow_dispatch a déjà commencé à progresser.",
+
+  "plugin.toast.failure.unknown.title": "Erreur inconnue",
+  "plugin.toast.failure.unknown.description": "Quelque chose s'est mal passé, réessayez plus tard",
+
+  "plugin.toast.failure.unprocessableEntity.title": "Erreur d'événement",
+  "plugin.toast.failure.unprocessableEntity.description": "Votre événement workflow_dispatch est désactivé.",
+
+  "settings.table.confirmDelete.title": "Supprimer la configuration du workflow?",
+  "settings.table.confirmDelete.message": "Êtes-vous sûr de vouloir supprimer cette configuration?",
+  "settings.table.confirmDelete.confirm": "Oui, supprimer",
+  "settings.table.empty.content": "Aucun workflow configuré pour le moment. Ajoutez votre premier workflow pour commencer.",
+  "plugin.empty.content": "Aucun workflow configuré pour le moment.",
+  "plugin.empty.action": "Ajouter un workflow",
+
+  "configModal.title": "Confirmer l'action",
+  "configModal.cancel": "Annuler",
+  "configModal.confirm": "Confirmer",
+
+  "pagination.prev": "Précédent",
+  "pagination.next": "Suivant",
+
+  "button.seeMore": "Voir plus",
+  "button.refresh": "Actualiser",
+  "button.back": "Retour",
+  "button.save": "Enregistrer",
+  "button.details": "Détails",
+  "confirm.message": "Confirmez-vous le déclenchement de cette action ?",
+  
+  "plugin.workflowSelector.label": "Sélectionner un workflow",
+  "plugin.workflowSelector.placeholder": "Choisir un workflow"
+}

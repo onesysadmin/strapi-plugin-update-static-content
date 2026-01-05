@@ -20,6 +20,10 @@ export default {
     },
   },
   attributes: {
+    description: {
+      type: 'string',
+      required: false,
+    },
     githubToken: {
       type: 'string',
       required: true,

@@ -30,6 +30,8 @@ Plugin Page
 
 - 🔐 **Secure Token Storage** - GitHub tokens are encrypted using AES-256-GCM encryption
 - 📋 **Multiple Workflows** - Configure and manage multiple GitHub Action workflows
+- ✏️ **Edit Workflows** - Modify workflow configurations without exposing sensitive tokens
+- 📝 **Workflow Descriptions** - Add friendly names to workflows for easy identification
 - 🚀 **Trigger Workflows** - Manually trigger individual workflows or all workflows at once
 - 📊 **Workflow History** - View workflow run history with pagination (20 runs per page)
 - 📥 **Download Logs** - Download workflow run logs directly from the admin panel
@@ -155,21 +157,32 @@ Once the plugin is installed and configured:
 1. Navigate to **Settings → Update Static Content** in your Strapi admin panel
 2. Click **"Add Workflow"**
 3. Fill in the workflow configuration:
+   - **Workflow Description**: A friendly name to identify this workflow (e.g., "Production Deploy", "Staging Build")
    - **GitHub Personal Access Token**: Your GitHub PAT from step 5
    - **GitHub Owner Account**: Your GitHub username or organization name
    - **GitHub Repository**: The repository name (e.g., `my-static-site`)
    - **Workflow Id OR Filename**: The workflow filename (e.g., `deploy.yml`) or workflow ID
    - **Branch**: The branch to trigger the workflow on (e.g., `main`)
-4. Click **"Confirm"** to save
+4. Click **"Save"** to save
 
 You can add multiple workflow configurations to manage different sites or deployment targets.
+
+### 7. Edit Existing Workflows
+
+To modify an existing workflow configuration:
+
+1. Navigate to **Settings → Update Static Content**
+2. Click the **pencil icon** (✏️) next to the workflow you want to edit
+3. Update any fields as needed
+4. **Note**: The GitHub token field is optional when editing. Leave it empty to keep your existing token, or enter a new token to update it.
+5. Click **"Save"** to save your changes
 
 ## Usage
 
 ### Trigger a Single Workflow
 
 1. Navigate to the **Update Static Content** plugin page from the main menu
-2. Find the workflow you want to trigger
+2. Select a workflow from the dropdown menu (workflows are identified by their description or details)
 3. Click the **"Trigger"** button
 4. Confirm the action
 5. View the workflow history and status
@@ -201,11 +214,14 @@ Click the **"Details"** button on any workflow run to download the complete logs
 
 | Field | Required | Description |
 |-------|----------|-------------|
+| Workflow Description | Yes | A friendly name to easily identify this workflow (e.g., "Production Deploy") |
 | GitHub Personal Access Token | Yes | GitHub PAT with `repo` scope for accessing the repository |
 | GitHub Owner Account | Yes | GitHub username or organization name that owns the repository |
 | GitHub Repository | Yes | Repository name (without the owner prefix) |
 | Workflow Id OR Filename | Yes | GitHub Actions workflow filename (e.g., `deploy.yml`) or workflow ID |
 | Branch | Yes | Git branch to trigger the workflow on (e.g., `main`, `production`) |
+
+**Note**: When editing an existing workflow, the GitHub Personal Access Token field is optional. Leave it empty to keep the existing token.
 
 ## Permissions
 
@@ -227,6 +243,7 @@ If you need to integrate with the plugin programmatically, the following endpoin
 - `GET /api/update-static-content/config` - Get all workflow configurations
 - `GET /api/update-static-content/config/:id` - Get a specific workflow configuration
 - `POST /api/update-static-content/config` - Create a new workflow configuration
+- `PUT /api/update-static-content/config/:id` - Update an existing workflow configuration
 - `DELETE /api/update-static-content/config/:id` - Delete a workflow configuration
 
 ### Workflow Endpoints

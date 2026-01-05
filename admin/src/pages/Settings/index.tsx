@@ -5,9 +5,11 @@ import { Layouts, Page } from '@strapi/strapi/admin';
 import useFormattedLabel from '../../hooks/useFormattedLabel';
 import WorkflowsTable from '../../components/WorkflowsTable';
 import AddWorkflow from '../../components/AddWorkflow';
+import EditWorkflow from '../../components/EditWorkflow';
 
 const Settings = () => {
   const [showAddForm, setShowAddForm] = useState(false);
+  const [editWorkflowId, setEditWorkflowId] = useState<string | null>(null);
 
   // Translations
   const PAGE_TITLE = useFormattedLabel('settings.pagetitle');
@@ -21,7 +23,16 @@ const Settings = () => {
 
   const handleBackToList = () => {
     setShowAddForm(false);
+    setEditWorkflowId(null);
   };
+
+  const handleEditWorkflow = (workflowId: string) => {
+    setEditWorkflowId(workflowId);
+  };
+
+  if (editWorkflowId) {
+    return <EditWorkflow workflowId={editWorkflowId} onCancel={handleBackToList} onSuccess={handleBackToList} />;
+  }
 
   if (showAddForm) {
     return <AddWorkflow onCancel={handleBackToList} onSuccess={handleBackToList} />;
@@ -41,7 +52,7 @@ const Settings = () => {
           )}
         />
         <Layouts.Content>
-          <WorkflowsTable />
+          <WorkflowsTable onEdit={handleEditWorkflow} />
         </Layouts.Content>
       </Page.Main>
     </Layouts.Root>
