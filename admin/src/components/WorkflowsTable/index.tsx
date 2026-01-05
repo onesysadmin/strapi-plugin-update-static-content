@@ -11,7 +11,7 @@ import {
   Box,
   Flex,
   EmptyStateLayout,
-  Button,
+  IconButton,
 } from '@strapi/design-system';
 import { Trash, Pencil } from '@strapi/icons';
 import { EmptyDocuments } from '@strapi/icons/symbols';
@@ -23,7 +23,7 @@ import useFetch from '../../hooks/useFetch';
 import { ConfirmDialog } from '../ConfirmDialog';
 
 export default function WorkflowsTable({ onEdit }: { onEdit: (workflowId: string) => void }) {
-  const [data, isDataLoading, refetchData] = useFetch<Config[]>(`/${pluginId}/config`);
+  const [data, isDataLoading, refetchData] = useFetch<Config[]>(`/${pluginId}/config`, false, []);
   const { del } = useFetchClient();
 
   const [deleteDocumentId, setDeleteDocumentId] = useState<string | null>(null);
@@ -118,17 +118,21 @@ export default function WorkflowsTable({ onEdit }: { onEdit: (workflowId: string
                       <Typography textColor="neutral800">{workflow.workflow}</Typography>
                     </Td>
                     <Td>
-                      <Flex gap={1}>
-                        <Button
+                      <Flex gap={0}>
+                        <IconButton
                           onClick={() => { if (workflow.documentId) onEdit(workflow.documentId); }}
+                          label="Edit"
                           variant="ghost"
-                          startIcon={<Pencil />}
-                        />
-                        <Button
+                        >
+                          <Pencil />
+                        </IconButton>
+                        <IconButton
                           onClick={() => { if (workflow.documentId) openDeleteDialog(workflow.documentId); }}
+                          label="Delete"
                           variant="ghost"
-                          startIcon={<Trash />}
-                        />
+                        >
+                          <Trash />
+                        </IconButton>
                       </Flex>
                     </Td>
                   </Tr>

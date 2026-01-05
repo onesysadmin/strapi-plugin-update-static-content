@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.2.1] - 2026-01-05
+
+### Fixed
+- Fixed edit and trash icon buttons spacing in workflows table - replaced Button components with IconButton for a more compact, squared appearance matching Strapi's design patterns
+- Fixed "h.map is not a function" error when config fetch fails - useFetch hook now properly initializes array types with empty array instead of empty object
+- Improved error handling for decryption failures with more descriptive error messages
+
 ## [5.2.0] - 2026-01-05
 
 ### Added

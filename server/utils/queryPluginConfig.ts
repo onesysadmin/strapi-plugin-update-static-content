@@ -6,7 +6,14 @@ import Config from '../../types/Config';
 function decryptToken(c: Config, encryptionKey: string): Config {
   const githubToken = c.githubToken;
   if (githubToken) {
-    c.githubToken = decrypt(githubToken, encryptionKey);
+    try {
+      c.githubToken = decrypt(githubToken, encryptionKey);
+    } catch (error) {
+      // If decryption fails, it might be due to corrupted data or wrong encryption key
+      // Log the error but don't fail the entire request
+      console.error(`Failed to decrypt token for config ${c.id}:`, error);
+      throw new Error(`Failed to decrypt token for config ${c.id}. The data may be corrupted or encrypted with a different key.`);
+    }
   }
   return c;
 }
