@@ -1,7 +1,7 @@
 import type { Core } from '@strapi/strapi';
 import { pluginId } from '../../admin/src/pluginId';
 import { queryPluginConfig, queryPluginConfigId } from '../utils/queryPluginConfig';
-import { validateConfig } from '../validators/validateConfig';
+import { validateConfig, validateConfigUpdate } from '../validators/validateConfig';
 import { encrypt } from '../utils/crypto';
 
 export default ({ strapi }: { strapi: Core.Strapi }) => ({
@@ -12,6 +12,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         return {
           id: c.id,
           documentId: c.documentId,
+          description: c.description,
           githubToken: c.githubToken.replace(/./g, '*'),
           githubAccount: c.githubAccount,
           repo: c.repo,
@@ -32,6 +33,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       const pluginConfig = await queryPluginConfigId(strapi, id);
       ctx.body = {
         id: pluginConfig.id,
+        description: pluginConfig.description,
         githubToken: pluginConfig.githubToken.replace(/./g, '*'),
         githubAccount: pluginConfig.githubAccount,
         repo: pluginConfig.repo,
@@ -95,6 +97,67 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       ctx.status = 500;
       ctx.body = {
         error: 'Failed to update config',
+      };
+    }
+  },
+
+  editPluginConfigById: async (ctx) => {
+    try {
+      const { id } = ctx.params;
+      const { body } = ctx.request;
+
+      const sanitizedBody = await validateConfigUpdate(body);
+
+      const encryptionKey = strapi.plugin(pluginId).config('ENCRYPTION_KEY');
+      if (typeof encryptionKey !== 'string') {
+        ctx.status = 500;
+        ctx.body = {
+          error: 'ENCRYPTION_KEY not found in server config',
+        };
+        return;
+      }
+
+      // Fetch existing config to preserve the token if not provided
+      const existingConfig = await queryPluginConfigId(strapi, id);
+
+      // Build update data
+      const updateData: {
+        description: string;
+        githubAccount: string;
+        repo: string;
+        workflow: string;
+        branch: string;
+        githubToken?: string;
+      } = {
+        description: sanitizedBody.description,
+        githubAccount: sanitizedBody.githubAccount,
+        repo: sanitizedBody.repo,
+        workflow: sanitizedBody.workflow,
+        branch: sanitizedBody.branch,
+      };
+
+      // Only update token if a new one was provided
+      if (sanitizedBody.githubToken && sanitizedBody.githubToken.trim() !== '') {
+        updateData.githubToken = encrypt(sanitizedBody.githubToken, encryptionKey);
+      } else {
+        // Keep existing token
+        updateData.githubToken = existingConfig.githubToken;
+      }
+
+      await strapi.documents(`plugin::${pluginId}.config`).update({
+        documentId: id,
+        data: updateData,
+      });
+
+      ctx.body = {
+        success: true,
+        message: 'Config updated successfully',
+      };
+    } catch (error) {
+      strapi.log.error(`Failed to edit plugin config with id ${ctx.params.id}:`, error);
+      ctx.status = 500;
+      ctx.body = {
+        error: 'Failed to edit config',
       };
     }
   },

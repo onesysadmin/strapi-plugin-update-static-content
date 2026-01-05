@@ -1,16 +1,18 @@
 import { Flex, Link, TextInput, Button, Field, Box } from '@strapi/design-system';
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import useFormattedLabel from '../../hooks/useFormattedLabel';
 import { Layouts, Page, useFetchClient } from '@strapi/strapi/admin';
 import { pluginId } from '../../pluginId';
 import { ArrowLeft, Check } from '@strapi/icons';
+import Config from '../../../../types/Config';
 
-interface AddWorkflowProps {
+interface EditWorkflowProps {
+  workflowId: string;
   onCancel: () => void;
   onSuccess: () => void;
 }
 
-export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
+export default function EditWorkflow({ workflowId, onCancel, onSuccess }: EditWorkflowProps) {
   const [description, setDescription] = useState('');
   const [workflow, setWorkflow] = useState('');
   const [branch, setBranch] = useState('');
@@ -18,11 +20,12 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
   const [repo, setRepo] = useState('');
   const [githubToken, setGithubToken] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const { post } = useFetchClient();
+  const { get, put } = useFetchClient();
 
-  const HEADER_TITLE = 'Add New Workflow';
-  const HEADER_SUBTITLE = 'Add a new workflow to update the static content';
+  const HEADER_TITLE = 'Edit Workflow';
+  const HEADER_SUBTITLE = 'Edit workflow configuration';
 
   const DESCRIPTION = useFormattedLabel('settings.fields.description');
   const GITHUB_TOKEN = useFormattedLabel('settings.fields.githubtoken');
@@ -32,14 +35,14 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
   const BRANCH = useFormattedLabel('settings.fields.branch');
 
   const HINT_DESCRIPTION = useFormattedLabel('settings.fields.hint.description');
-  const HINT_GITHUB_TOKEN = useFormattedLabel('settings.fields.hint.githubtoken');
+  const HINT_GITHUB_TOKEN_EDIT = useFormattedLabel('settings.fields.hint.githubtoken.edit');
   const HINT_OWNER = useFormattedLabel('settings.fields.hint.owner');
   const HINT_REPO = useFormattedLabel('settings.fields.hint.repo');
   const HINT_WORKFLOWID = useFormattedLabel('settings.fields.hint.workflowid');
   const HINT_BRANCH = useFormattedLabel('settings.fields.hint.branch');
 
   const PLACEHOLDER_DESCRIPTION = useFormattedLabel('settings.fields.placeholder.description');
-  const PLACEHOLDER_GITHUB_TOKEN = useFormattedLabel('settings.fields.placeholder.githubtoken');
+  const PLACEHOLDER_GITHUB_TOKEN_EDIT = useFormattedLabel('settings.fields.placeholder.githubtoken.edit');
   const PLACEHOLDER_OWNER = useFormattedLabel('settings.fields.placeholder.owner');
   const PLACEHOLDER_REPO = useFormattedLabel('settings.fields.placeholder.repo');
   const PLACEHOLDER_WORKFLOWID = useFormattedLabel('settings.fields.placeholder.workflowid');
@@ -49,19 +52,42 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
   const BACK_BUTTON = useFormattedLabel('button.back');
   const SAVE_BUTTON = useFormattedLabel('button.save');
 
-  const isFormValid = description && githubToken && githubAccount && repo && workflow && branch;
+  const isFormValid = description && githubAccount && repo && workflow && branch;
+
+  useEffect(() => {
+    const fetchWorkflow = async () => {
+      try {
+        setIsLoading(true);
+        const response = await get<Config>(`/${pluginId}/config/${workflowId}`);
+        if (response.data) {
+          setDescription(response.data.description || '');
+          setGithubAccount(response.data.githubAccount);
+          setRepo(response.data.repo);
+          setWorkflow(response.data.workflow);
+          setBranch(response.data.branch);
+          // Don't populate githubToken as it's masked on the server
+        }
+      } catch (error) {
+        console.error('Failed to fetch workflow:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchWorkflow();
+  }, [workflowId, get]);
 
   const handleSubmit = async () => {
     if (!isFormValid) {
-      console.error('Please fill all the fields');
+      console.error('Please fill all required fields');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      await post(`/${pluginId}/config`, {
+      await put(`/${pluginId}/config/${workflowId}`, {
         description,
-        githubToken,
+        githubToken: githubToken || undefined, // Send undefined if empty to keep existing token
         githubAccount,
         repo,
         workflow,
@@ -77,7 +103,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
 
   return (
     <Layouts.Root>
-      <Page.Main aria-busy={isSubmitting}>
+      <Page.Main aria-busy={isSubmitting || isLoading}>
         <Page.Title>{HEADER_TITLE}</Page.Title>
         <Layouts.Header
           title={HEADER_TITLE}
@@ -91,7 +117,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
             <Button
               onClick={handleSubmit}
               loading={isSubmitting}
-              disabled={!isFormValid}
+              disabled={!isFormValid || isLoading}
               startIcon={<Check />}
               size="S"
             >
@@ -118,21 +144,23 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setDescription(e.target.value); }}
                   placeholder={PLACEHOLDER_DESCRIPTION}
                   autoComplete="off"
+                  disabled={isLoading}
                 />
                 <Field.Hint>{HINT_DESCRIPTION}</Field.Hint>
               </Field.Root>
 
-              <Field.Root name="githubToken" required>
+              <Field.Root name="githubToken">
                 <Field.Label>{GITHUB_TOKEN}</Field.Label>
                 <TextInput
                   type="text"
                   value={githubToken}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setGithubToken(e.target.value); }}
-                  placeholder={PLACEHOLDER_GITHUB_TOKEN}
+                  placeholder={PLACEHOLDER_GITHUB_TOKEN_EDIT}
                   autoComplete="off"
+                  disabled={isLoading}
                 />
                 <Field.Hint>
-                  {HINT_GITHUB_TOKEN}
+                  {HINT_GITHUB_TOKEN_EDIT}
                   {' '}
                   <Link
                     href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
@@ -150,6 +178,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   value={githubAccount}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setGithubAccount(e.target.value); }}
                   placeholder={PLACEHOLDER_OWNER}
+                  disabled={isLoading}
                 />
                 <Field.Hint>{HINT_OWNER}</Field.Hint>
               </Field.Root>
@@ -161,6 +190,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   value={repo}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setRepo(e.target.value); }}
                   placeholder={PLACEHOLDER_REPO}
+                  disabled={isLoading}
                 />
                 <Field.Hint>{HINT_REPO}</Field.Hint>
               </Field.Root>
@@ -172,6 +202,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   value={branch}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setBranch(e.target.value); }}
                   placeholder={PLACEHOLDER_BRANCH}
+                  disabled={isLoading}
                 />
                 <Field.Hint>{HINT_BRANCH}</Field.Hint>
               </Field.Root>
@@ -183,6 +214,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   value={workflow}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setWorkflow(e.target.value); }}
                   placeholder={PLACEHOLDER_WORKFLOWID}
+                  disabled={isLoading}
                 />
                 <Field.Hint>{HINT_WORKFLOWID}</Field.Hint>
               </Field.Root>

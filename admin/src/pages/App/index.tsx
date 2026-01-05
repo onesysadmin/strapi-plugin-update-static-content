@@ -366,7 +366,9 @@ function App() {
                         key={workflow.documentId}
                         value={workflow.documentId}
                       >
-                        {`${workflow.githubAccount}:${workflow.repo}/${workflow.branch}/${workflow.workflow}`}
+                        {workflow.description && workflow.description.trim() !== ''
+                          ? workflow.description
+                          : `${workflow.githubAccount}:${workflow.repo}/${workflow.branch}/${workflow.workflow}`}
                       </SingleSelectOption>
                     ))}
                 </SingleSelect>

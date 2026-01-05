@@ -66,6 +66,22 @@ export default [
     },
   },
   {
+    method: 'PUT',
+    path: '/config/:id',
+    handler: 'config.editPluginConfigById',
+    config: {
+      policies: [
+        'admin::isAuthenticatedAdmin',
+        {
+          name: 'admin::hasPermissions',
+          config: {
+            actions: [`plugin::${pluginId}.settings`],
+          },
+        },
+      ],
+    },
+  },
+  {
     method: 'GET',
     path: '/github-actions-history/:id',
     handler: 'githubActions.history',

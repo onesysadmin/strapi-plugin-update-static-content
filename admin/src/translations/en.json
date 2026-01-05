@@ -9,6 +9,7 @@
   "settings.headers.subtitle": "Here you can see your Update Static Content Configuration",
   "loadingMsg": "Loading....",
 
+  "settings.fields.description": "Workflow Description",
   "settings.fields.githubtoken": "Github Personal Access Token",
   "settings.fields.owner": "Github Owner Account",
   "settings.fields.repo": "Github Repository",
@@ -16,14 +17,18 @@
   "settings.fields.branch": "Branch",
   "settings.fields.roles": "Roles",
 
+  "settings.fields.hint.description": "Enter a descriptive name for this workflow to easily identify it",
   "settings.fields.hint.githubtoken": "Enter your `Github Personal Access Token` if you do not have create one from here",
+  "settings.fields.hint.githubtoken.edit": "Leave empty to keep the existing token, or enter a new token to update it",
   "settings.fields.hint.owner": "Enter your `Github Username (owner of the account)`",
   "settings.fields.hint.repo": "Enter your `Github Repository`",
   "settings.fields.hint.workflowid": "Enter your `workflowId` or `filename`",
   "settings.fields.hint.branch": "Enter the desired `branch`",
   "settings.fields.hint.roles": "Roles that have access to the plugin",
 
+  "settings.fields.placeholder.description": "e.g., Production Deploy, Staging Build, etc.",
   "settings.fields.placeholder.githubtoken": "github_pat_*******",
+  "settings.fields.placeholder.githubtoken.edit": "Leave empty to keep current token",
   "settings.fields.placeholder.owner": "evrythinginjs",
   "settings.fields.placeholder.repo": "my-static-website",
   "settings.fields.placeholder.branch": "main",

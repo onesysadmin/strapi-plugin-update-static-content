@@ -13,7 +13,7 @@ import {
   EmptyStateLayout,
   Button,
 } from '@strapi/design-system';
-import { Trash } from '@strapi/icons';
+import { Trash, Pencil } from '@strapi/icons';
 import { EmptyDocuments } from '@strapi/icons/symbols';
 import { useState } from 'react';
 import { useFetchClient } from '@strapi/strapi/admin';
@@ -22,7 +22,7 @@ import PageLoading from '../PageLoading';
 import useFetch from '../../hooks/useFetch';
 import { ConfirmDialog } from '../ConfirmDialog';
 
-export default function WorkflowsTable() {
+export default function WorkflowsTable({ onEdit }: { onEdit: (workflowId: string) => void }) {
   const [data, isDataLoading, refetchData] = useFetch<Config[]>(`/${pluginId}/config`);
   const { del } = useFetchClient();
 
@@ -70,11 +70,14 @@ export default function WorkflowsTable() {
             <EmptyStateLayout icon={<EmptyDocuments width="160px" />} content={EMPTY_STATE_CONTENT} />
           )
         : (
-            <Table colCount={6} rowCount={data.length}>
+            <Table colCount={7} rowCount={data.length}>
               <Thead>
                 <Tr>
                   <Th>
                     <Typography variant="sigma">ID</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">Description</Typography>
                   </Th>
                   <Th>
                     <Typography variant="sigma">GitHub Account</Typography>
@@ -100,6 +103,9 @@ export default function WorkflowsTable() {
                       <Typography textColor="neutral800">{workflow.id}</Typography>
                     </Td>
                     <Td>
+                      <Typography textColor="neutral800">{workflow.description}</Typography>
+                    </Td>
+                    <Td>
                       <Typography textColor="neutral800">{workflow.githubAccount}</Typography>
                     </Td>
                     <Td>
@@ -112,7 +118,12 @@ export default function WorkflowsTable() {
                       <Typography textColor="neutral800">{workflow.workflow}</Typography>
                     </Td>
                     <Td>
-                      <Flex>
+                      <Flex gap={1}>
+                        <Button
+                          onClick={() => { if (workflow.documentId) onEdit(workflow.documentId); }}
+                          variant="ghost"
+                          startIcon={<Pencil />}
+                        />
                         <Button
                           onClick={() => { if (workflow.documentId) openDeleteDialog(workflow.documentId); }}
                           variant="ghost"
