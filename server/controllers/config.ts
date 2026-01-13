@@ -26,6 +26,7 @@ const mapConfigToResponse = (config: {
 });
 
 export default ({ strapi }: { strapi: Core.Strapi }) => ({
+  // Get plugin config (requires settings permission)
   getPluginConfig: async (ctx) => {
     try {
       const pluginConfig = await queryPluginConfig(strapi);
@@ -37,6 +38,9 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     }
   },
 
+  // Get plugin config list (requires only trigger permission for read-only access)
+  // This method is identical to getPluginConfig but has different permission requirements
+  // in routes/index.ts, allowing users with trigger permission to view workflows
   getPluginConfigList: async (ctx) => {
     try {
       const pluginConfig = await queryPluginConfig(strapi);
