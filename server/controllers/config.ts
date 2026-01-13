@@ -27,6 +27,28 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     }
   },
 
+  getPluginConfigList: async (ctx) => {
+    try {
+      const pluginConfig = await queryPluginConfig(strapi);
+      ctx.body = pluginConfig.map((c) => {
+        return {
+          id: c.id,
+          documentId: c.documentId,
+          description: c.description,
+          githubToken: c.githubToken.replace(/./g, '*'),
+          githubAccount: c.githubAccount,
+          repo: c.repo,
+          workflow: c.workflow,
+          branch: c.branch,
+        };
+      });
+    } catch (error) {
+      strapi.log.error('Failed to fetch plugin configs:', error);
+      ctx.status = 500;
+      ctx.body = [];
+    }
+  },
+
   getPluginConfigById: async (ctx) => {
     try {
       const { id } = ctx.params;

@@ -19,6 +19,22 @@ export default [
   },
   {
     method: 'GET',
+    path: '/config/list',
+    handler: 'config.getPluginConfigList',
+    config: {
+      policies: [
+        'admin::isAuthenticatedAdmin',
+        {
+          name: 'admin::hasPermissions',
+          config: {
+            actions: [`plugin::${pluginId}.trigger`],
+          },
+        },
+      ],
+    },
+  },
+  {
+    method: 'GET',
     path: '/config/:id',
     handler: 'config.getPluginConfigById',
     config: {
