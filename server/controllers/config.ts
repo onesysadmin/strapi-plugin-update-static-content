@@ -4,22 +4,47 @@ import { queryPluginConfig, queryPluginConfigId } from '../utils/queryPluginConf
 import { validateConfig, validateConfigUpdate } from '../validators/validateConfig';
 import { encrypt } from '../utils/crypto';
 
+// Helper function to map plugin config to response format
+const mapConfigToResponse = (config: {
+  id?: number;
+  documentId?: string;
+  description?: string;
+  githubToken: string;
+  githubAccount: string;
+  repo: string;
+  workflow: string;
+  branch: string;
+}) => ({
+  id: config.id,
+  documentId: config.documentId,
+  description: config.description,
+  githubToken: config.githubToken.replace(/./g, '*'),
+  githubAccount: config.githubAccount,
+  repo: config.repo,
+  workflow: config.workflow,
+  branch: config.branch,
+});
+
 export default ({ strapi }: { strapi: Core.Strapi }) => ({
+  // Get plugin config (requires settings permission)
   getPluginConfig: async (ctx) => {
     try {
       const pluginConfig = await queryPluginConfig(strapi);
-      ctx.body = pluginConfig.map((c) => {
-        return {
-          id: c.id,
-          documentId: c.documentId,
-          description: c.description,
-          githubToken: c.githubToken.replace(/./g, '*'),
-          githubAccount: c.githubAccount,
-          repo: c.repo,
-          workflow: c.workflow,
-          branch: c.branch,
-        };
-      });
+      ctx.body = pluginConfig.map(mapConfigToResponse);
+    } catch (error) {
+      strapi.log.error('Failed to fetch plugin configs:', error);
+      ctx.status = 500;
+      ctx.body = [];
+    }
+  },
+
+  // Get plugin config list (requires only trigger permission for read-only access)
+  // This method is identical to getPluginConfig but has different permission requirements
+  // in routes/index.ts, allowing users with trigger permission to view workflows
+  getPluginConfigList: async (ctx) => {
+    try {
+      const pluginConfig = await queryPluginConfig(strapi);
+      ctx.body = pluginConfig.map(mapConfigToResponse);
     } catch (error) {
       strapi.log.error('Failed to fetch plugin configs:', error);
       ctx.status = 500;
@@ -31,15 +56,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     try {
       const { id } = ctx.params;
       const pluginConfig = await queryPluginConfigId(strapi, id);
-      ctx.body = {
-        id: pluginConfig.id,
-        description: pluginConfig.description,
-        githubToken: pluginConfig.githubToken.replace(/./g, '*'),
-        githubAccount: pluginConfig.githubAccount,
-        repo: pluginConfig.repo,
-        workflow: pluginConfig.workflow,
-        branch: pluginConfig.branch,
-      };
+      ctx.body = mapConfigToResponse(pluginConfig);
     } catch (error) {
       strapi.log.error(`Failed to fetch plugin config with id ${ctx.params.id}:`, error);
       ctx.status = 500;

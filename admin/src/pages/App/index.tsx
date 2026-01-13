@@ -17,7 +17,7 @@ import {
   Field,
 } from '@strapi/design-system';
 import { EmptyDocuments } from '@strapi/icons/symbols';
-import { Layouts, Page, useFetchClient } from '@strapi/strapi/admin';
+import { Layouts, Page, useFetchClient, useRBAC } from '@strapi/strapi/admin';
 import { Check, Plus, ArrowClockwise } from '@strapi/icons';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +30,7 @@ import useFetch from '../../hooks/useFetch';
 import useFormattedLabel from '../../hooks/useFormattedLabel';
 import { pluginId } from '../../pluginId';
 import { Pagination } from '../../components/Pagination';
+import pluginPermissions from '../../permissions';
 
 const THEAD_ITEMS = [
   'Run Number',
@@ -70,8 +71,16 @@ function App() {
   const [toastToggle, setToastToggle] = useState(false);
   const { post } = useFetchClient();
   const [workflows, isWorkflowsFetching] = useFetch<Config[]>(
-    `/${pluginId}/config`,
+    `/${pluginId}/config/list`,
   );
+
+  // Check if user has settings permission
+  const {
+    isLoading: isLoadingPermissions,
+    allowedActions: { canAccessSettings },
+  } = useRBAC({
+    settings: pluginPermissions.settings,
+  });
 
   const [page, setPage] = useState(1);
 
@@ -290,7 +299,7 @@ function App() {
     );
   }
 
-  if (isWorkflowsFetching) {
+  if (isWorkflowsFetching || isLoadingPermissions) {
     return (
       <Layouts.Root>
         <Page.Main>
@@ -316,7 +325,7 @@ function App() {
               <EmptyStateLayout
                 icon={<EmptyDocuments width="160px" />}
                 content={EMPTY_STATE_CONTENT}
-                action={(
+                action={canAccessSettings ? (
                   <Button
                     variant="secondary"
                     startIcon={<Plus />}
@@ -324,7 +333,7 @@ function App() {
                   >
                     {EMPTY_STATE_ACTION}
                   </Button>
-                )}
+                ) : null}
               />
             </Box>
           </Layouts.Content>

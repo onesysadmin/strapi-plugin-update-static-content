@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.2.4] - 2026-01-13
+
+### Fixed
+- Fixed workflow visibility for users with only trigger permission (Editors) - they can now see workflows and workflow history without needing settings permission
+- Fixed empty state "Add Workflow" button showing to users without settings permission - button now only appears for users with settings access
+- Added read-only config endpoint (`/config/list`) that requires only trigger permission for viewing workflows
+
+### Changed
+- App page now uses `/config/list` endpoint instead of `/config` for fetching workflows, allowing read access with trigger permission
+
 ## [5.2.3] - 2026-01-05
 
 ### Fixed
