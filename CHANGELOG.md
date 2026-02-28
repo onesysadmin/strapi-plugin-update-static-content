@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.2.6] - 2026-02-28
+
+### Fixed
+- Removed `@strapi/sdk-plugin` from `peerDependencies` — it is a build tool for plugin developers only and should not be required in consumer Strapi applications
+
 ## [5.2.5] - 2026-02-28
 
 ### Changed
