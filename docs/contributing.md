@@ -82,6 +82,22 @@ Bump version to X.Y.Z
 6. Bump MINOR version
 7. Add `CHANGELOG.md` entry under `### Added`
 
+## Dependency Upgrade Constraints
+
+Some dependencies are intentionally held back. Do not upgrade them without first resolving the blocker noted below.
+
+| Package | Current | Blocked at | Reason |
+|---|---|---|---|
+| `eslint` / `@eslint/js` | `^9.x` | v10 | `eslint-plugin-react` v7 calls `context.getFilename()` which was removed in ESLint v10. There is no v8 of `eslint-plugin-react`. **Do not upgrade eslint to v10 until a version of `eslint-plugin-react` declares support for ESLint v10 in its `peerDependencies`.** |
+| `react` / `react-dom` / `@types/react*` | `^18.x` | v19 | Strapi's own `peerDependencies` only allow `^17.0.0 \|\| ^18.0.0`. Hold until Strapi adds React 19 to its peer range. |
+| `react-router-dom` | `^6.x` | v7 | Strapi's `peerDependencies` require `react-router-dom@^6`. v7 renames the package to `react-router` and changes all import paths. Hold until Strapi updates its peer range. |
+| `react-intl` | `^6.x` | v7/v8 | Strapi SDK locks `react-intl` to a compatible major (currently v6). v8 also drops React 18 support. Hold until Strapi upgrades. |
+
+### When checking if a blocker is resolved
+
+- **`eslint-plugin-react`**: check `peerDependencies` in its `package.json` on npm — it must include `^10` or higher before upgrading eslint.
+- **`react` / `react-router-dom` / `react-intl`**: check Strapi's `peerDependencies` at https://www.npmjs.com/package/@strapi/strapi before upgrading.
+
 ## Testing
 
 No automated tests currently. When adding tests:

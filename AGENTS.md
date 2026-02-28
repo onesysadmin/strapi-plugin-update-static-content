@@ -24,7 +24,7 @@ Load the relevant doc before making changes:
 | API / endpoint changes | `docs/api.md` |
 | Config, env vars, troubleshooting | `docs/configuration.md` |
 | Project structure, dev commands, component patterns | `docs/architecture.md` |
-| Versioning, git workflow, release process, coding standards | `docs/contributing.md` |
+| Versioning, git workflow, release process, coding standards, **dependency upgrade constraints** | `docs/contributing.md` |
 
 ## References
 
