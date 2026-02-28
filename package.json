@@ -1,6 +1,6 @@
 {
   "name": "@onesysadmin/strapi-plugin-update-static-content",
-  "version": "5.2.4",
+  "version": "5.2.5",
   "description": "An strapi plugin to rebuild and deploy your SSG website via Github Actions.",
   "strapi": {
     "name": "update-static-content",
@@ -56,40 +56,40 @@
     }
   ],
   "engines": {
-    "node": ">=18.0.0 <=24.x.x",
+    "node": ">=20.19.0 <=24.x.x",
     "npm": ">=6.0.0"
   },
   "dependencies": {
     "@octokit/rest": "^22.0.1",
-    "@strapi/design-system": "^2.0.2",
-    "@strapi/icons": "^2.0.2",
+    "@strapi/design-system": "^2.2.0",
+    "@strapi/icons": "^2.2.0",
     "date-fns": "^4.1.0",
     "react-intl": "^6.8.9"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
-    "@strapi/sdk-plugin": "^5.4.0",
-    "@strapi/strapi": "^5.33.0",
-    "@strapi/typescript-utils": "^5.32.0",
-    "@stylistic/eslint-plugin": "^5.6.1",
+    "@eslint/js": "^9.39.3",
+    "@strapi/sdk-plugin": "^6.0.1",
+    "@strapi/strapi": "^5.37.1",
+    "@strapi/typescript-utils": "^5.37.1",
+    "@stylistic/eslint-plugin": "^5.9.0",
     "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
-    "eslint": "^9.39.2",
+    "eslint": "^9.39.3",
     "eslint-plugin-react": "^7.37.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.30.2",
-    "styled-components": "^6.1.19",
+    "styled-components": "^6.3.11",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.50.1"
+    "typescript-eslint": "^8.56.1"
   },
   "peerDependencies": {
-    "@strapi/sdk-plugin": "^5.3.2",
-    "@strapi/strapi": "^5.33.0",
+    "@strapi/sdk-plugin": "^6.0.1",
+    "@strapi/strapi": "^5.37.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.30.2",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.3.11"
   },
   "keywords": [
     "strapi",

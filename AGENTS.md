@@ -6,7 +6,7 @@ Strapi v5 plugin that lets users trigger GitHub Actions workflows from the Strap
 
 - Strapi v5 (≥5.33.0), TypeScript, React 18, Strapi Design System v2
 - Build: `@strapi/sdk-plugin` | Lint: ESLint TypeScript + Stylistic
-- Node.js 18–24 | Published to GitHub Packages (`@onesysadmin` scope)
+- Node.js 20.19–24 | Published to GitHub Packages (`@onesysadmin` scope)
 
 ## Key Constraints
 

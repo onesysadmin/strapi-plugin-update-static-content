@@ -136,7 +136,7 @@ export default function EditWorkflow({ workflowId, onCancel, onSuccess }: EditWo
             paddingRight={7}
           >
             <Flex direction="column" alignItems="stretch" gap={4}>
-              <Field.Root name="description" required>
+              <Field.Root name="description" required hint={HINT_DESCRIPTION}>
                 <Field.Label>{DESCRIPTION}</Field.Label>
                 <TextInput
                   type="text"
@@ -146,10 +146,24 @@ export default function EditWorkflow({ workflowId, onCancel, onSuccess }: EditWo
                   autoComplete="off"
                   disabled={isLoading}
                 />
-                <Field.Hint>{HINT_DESCRIPTION}</Field.Hint>
+                <Field.Hint />
               </Field.Root>
 
-              <Field.Root name="githubToken">
+              <Field.Root
+                name="githubToken"
+                hint={(
+                  <>
+                    {HINT_GITHUB_TOKEN_EDIT}
+                    {' '}
+                    <Link
+                      href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
+                      isExternal
+                    >
+                      {BUTTON_DETAILS}
+                    </Link>
+                  </>
+                )}
+              >
                 <Field.Label>{GITHUB_TOKEN}</Field.Label>
                 <TextInput
                   type="text"
@@ -159,19 +173,10 @@ export default function EditWorkflow({ workflowId, onCancel, onSuccess }: EditWo
                   autoComplete="off"
                   disabled={isLoading}
                 />
-                <Field.Hint>
-                  {HINT_GITHUB_TOKEN_EDIT}
-                  {' '}
-                  <Link
-                    href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
-                    isExternal
-                  >
-                    {BUTTON_DETAILS}
-                  </Link>
-                </Field.Hint>
+                <Field.Hint />
               </Field.Root>
 
-              <Field.Root name="githubAccount" required>
+              <Field.Root name="githubAccount" required hint={HINT_OWNER}>
                 <Field.Label>{OWNER}</Field.Label>
                 <TextInput
                   type="text"
@@ -180,10 +185,10 @@ export default function EditWorkflow({ workflowId, onCancel, onSuccess }: EditWo
                   placeholder={PLACEHOLDER_OWNER}
                   disabled={isLoading}
                 />
-                <Field.Hint>{HINT_OWNER}</Field.Hint>
+                <Field.Hint />
               </Field.Root>
 
-              <Field.Root name="repo" required>
+              <Field.Root name="repo" required hint={HINT_REPO}>
                 <Field.Label>{REPO}</Field.Label>
                 <TextInput
                   type="text"
@@ -192,10 +197,10 @@ export default function EditWorkflow({ workflowId, onCancel, onSuccess }: EditWo
                   placeholder={PLACEHOLDER_REPO}
                   disabled={isLoading}
                 />
-                <Field.Hint>{HINT_REPO}</Field.Hint>
+                <Field.Hint />
               </Field.Root>
 
-              <Field.Root name="branch" required>
+              <Field.Root name="branch" required hint={HINT_BRANCH}>
                 <Field.Label>{BRANCH}</Field.Label>
                 <TextInput
                   type="text"
@@ -204,10 +209,10 @@ export default function EditWorkflow({ workflowId, onCancel, onSuccess }: EditWo
                   placeholder={PLACEHOLDER_BRANCH}
                   disabled={isLoading}
                 />
-                <Field.Hint>{HINT_BRANCH}</Field.Hint>
+                <Field.Hint />
               </Field.Root>
 
-              <Field.Root name="workflow_id" required>
+              <Field.Root name="workflow_id" required hint={HINT_WORKFLOWID}>
                 <Field.Label>{WORKFLOWID}</Field.Label>
                 <TextInput
                   type="text"
@@ -216,7 +221,7 @@ export default function EditWorkflow({ workflowId, onCancel, onSuccess }: EditWo
                   placeholder={PLACEHOLDER_WORKFLOWID}
                   disabled={isLoading}
                 />
-                <Field.Hint>{HINT_WORKFLOWID}</Field.Hint>
+                <Field.Hint />
               </Field.Root>
             </Flex>
           </Box>

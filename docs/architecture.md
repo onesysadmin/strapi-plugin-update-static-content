@@ -4,11 +4,12 @@
 
 | Layer | Technology |
 |---|---|
-| Framework | Strapi v5 (≥5.33.0) |
+| Framework | Strapi v5 (≥5.37.1) |
 | Language | TypeScript (strict mode) |
 | Frontend | React 18 + Strapi Design System v2 |
-| Build | `@strapi/sdk-plugin` |
-| Linting | ESLint with TypeScript + Stylistic |
+| Build | `@strapi/sdk-plugin` v6 |
+| Linting | ESLint v10 with TypeScript + Stylistic |
+| Node.js | ≥20.19.0, ≤24.x |
 | Testing | None (Jest + React Testing Library planned) |
 
 ## Project Structure

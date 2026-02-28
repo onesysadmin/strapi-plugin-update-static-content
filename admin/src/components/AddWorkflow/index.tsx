@@ -110,7 +110,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
             paddingRight={7}
           >
             <Flex direction="column" alignItems="stretch" gap={4}>
-              <Field.Root name="description" required>
+              <Field.Root name="description" required hint={HINT_DESCRIPTION}>
                 <Field.Label>{DESCRIPTION}</Field.Label>
                 <TextInput
                   type="text"
@@ -119,10 +119,25 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   placeholder={PLACEHOLDER_DESCRIPTION}
                   autoComplete="off"
                 />
-                <Field.Hint>{HINT_DESCRIPTION}</Field.Hint>
+                <Field.Hint />
               </Field.Root>
 
-              <Field.Root name="githubToken" required>
+              <Field.Root
+                name="githubToken"
+                required
+                hint={(
+                  <>
+                    {HINT_GITHUB_TOKEN}
+                    {' '}
+                    <Link
+                      href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
+                      isExternal
+                    >
+                      {BUTTON_DETAILS}
+                    </Link>
+                  </>
+                )}
+              >
                 <Field.Label>{GITHUB_TOKEN}</Field.Label>
                 <TextInput
                   type="text"
@@ -131,19 +146,10 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   placeholder={PLACEHOLDER_GITHUB_TOKEN}
                   autoComplete="off"
                 />
-                <Field.Hint>
-                  {HINT_GITHUB_TOKEN}
-                  {' '}
-                  <Link
-                    href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
-                    isExternal
-                  >
-                    {BUTTON_DETAILS}
-                  </Link>
-                </Field.Hint>
+                <Field.Hint />
               </Field.Root>
 
-              <Field.Root name="githubAccount" required>
+              <Field.Root name="githubAccount" required hint={HINT_OWNER}>
                 <Field.Label>{OWNER}</Field.Label>
                 <TextInput
                   type="text"
@@ -151,10 +157,10 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setGithubAccount(e.target.value); }}
                   placeholder={PLACEHOLDER_OWNER}
                 />
-                <Field.Hint>{HINT_OWNER}</Field.Hint>
+                <Field.Hint />
               </Field.Root>
 
-              <Field.Root name="repo" required>
+              <Field.Root name="repo" required hint={HINT_REPO}>
                 <Field.Label>{REPO}</Field.Label>
                 <TextInput
                   type="text"
@@ -162,10 +168,10 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setRepo(e.target.value); }}
                   placeholder={PLACEHOLDER_REPO}
                 />
-                <Field.Hint>{HINT_REPO}</Field.Hint>
+                <Field.Hint />
               </Field.Root>
 
-              <Field.Root name="branch" required>
+              <Field.Root name="branch" required hint={HINT_BRANCH}>
                 <Field.Label>{BRANCH}</Field.Label>
                 <TextInput
                   type="text"
@@ -173,10 +179,10 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setBranch(e.target.value); }}
                   placeholder={PLACEHOLDER_BRANCH}
                 />
-                <Field.Hint>{HINT_BRANCH}</Field.Hint>
+                <Field.Hint />
               </Field.Root>
 
-              <Field.Root name="workflow_id" required>
+              <Field.Root name="workflow_id" required hint={HINT_WORKFLOWID}>
                 <Field.Label>{WORKFLOWID}</Field.Label>
                 <TextInput
                   type="text"
@@ -184,7 +190,7 @@ export default function AddWorkflow({ onCancel, onSuccess }: AddWorkflowProps) {
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setWorkflow(e.target.value); }}
                   placeholder={PLACEHOLDER_WORKFLOWID}
                 />
-                <Field.Hint>{HINT_WORKFLOWID}</Field.Hint>
+                <Field.Hint />
               </Field.Root>
             </Flex>
           </Box>

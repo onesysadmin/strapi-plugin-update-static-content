@@ -325,15 +325,17 @@ function App() {
               <EmptyStateLayout
                 icon={<EmptyDocuments width="160px" />}
                 content={EMPTY_STATE_CONTENT}
-                action={canAccessSettings ? (
-                  <Button
-                    variant="secondary"
-                    startIcon={<Plus />}
-                    onClick={() => { navigate(`/settings/${pluginId}`); }}
-                  >
-                    {EMPTY_STATE_ACTION}
-                  </Button>
-                ) : null}
+                action={canAccessSettings
+                  ? (
+                      <Button
+                        variant="secondary"
+                        startIcon={<Plus />}
+                        onClick={() => { navigate(`/settings/${pluginId}`); }}
+                      >
+                        {EMPTY_STATE_ACTION}
+                      </Button>
+                    )
+                  : null}
               />
             </Box>
           </Layouts.Content>
@@ -353,7 +355,7 @@ function App() {
         />
         <Layouts.Content>
           {toastToggle && <ToastMsg {...toastMsg} closeToastHandler={() => { setToastToggle(false); }} />}
-          <Flex gap={3} alignItems="start" width="100%" overflowX="auto" direction="column">
+          <Flex gap={3} alignItems="start" width="100%" style={{ overflowX: 'auto' }} direction="column">
             <Box background="neutral0" shadow="tableShadow" hasRadius padding={4} width="100%">
               <Field.Root name="workflow-selector" width="300px">
                 <Field.Label>{WORKFLOW_SELECTOR_LABEL}</Field.Label>

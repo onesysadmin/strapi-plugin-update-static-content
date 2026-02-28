@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert } from '@strapi/design-system';
 
 const stickyStyle = {
-  position: 'fixed',
+  position: 'fixed' as const,
   top: 24,
   left: 'calc(50%)',
   transform: 'translateX(-50%)',

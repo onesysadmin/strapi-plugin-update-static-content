@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.2.5] - 2026-02-28
+
+### Changed
+- Bumped minimum Node.js requirement from ≥18 to ≥20.19.0
+- Upgraded `@strapi/sdk-plugin` from v5 to v6 (now uses Vite v6 directly)
+- Upgraded `@strapi/strapi` and `@strapi/typescript-utils` to `^5.37.1`
+- Upgraded `@strapi/design-system` and `@strapi/icons` to `^2.2.0`
+- Upgraded `typescript-eslint` to `^8.56.1`, `@stylistic/eslint-plugin` to `^5.9.0`, `eslint` to `^9.39.3`
+- Upgraded `styled-components` to `^6.3.11`
+
+### Fixed
+- Updated `Field.Root` + `Field.Hint` usage to match `@strapi/design-system` v2.2.0 API: hint content is now passed as the `hint` prop on `Field.Root` rather than as children of `Field.Hint`
+- Fixed `ToastMsg` inline style type error (`position: 'fixed' as const`)
+- Fixed `Flex` component `overflowX` prop replaced with `style={{ overflowX: 'auto' }}` per `@strapi/design-system` v2.2.0 `BoxProps`
+
 ## [5.2.4] - 2026-01-13
 
 ### Fixed
